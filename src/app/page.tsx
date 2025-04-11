@@ -1,103 +1,171 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  ChartBarIcon,
+  CheckCircle2Icon,
+  LockIcon,
+  PackageOpenIcon,
+  PhoneIcon,
+  ZapIcon,
+} from "lucide-react";
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="min-w-screen min-h-screen container mx-auto flex flex-col gap-4 p-4 dark">
+      <section className="flex flex-col gap-2">
+        <article className="flex flex-col gap-4">
+          <p className="border border-white/40 rounded-full w-fit px-4 py-2 text-sm bg-radial from-transparent from-20% to-white/40">
+            Our Creates, Your Trades
+          </p>
+          <h1 className="text-5xl font-bold">
+            Harness the Power of AI to Abritrage Hedging.
+          </h1>
+          <p>Start your free trial today!</p>
+          <div className="grid grid-cols-2 grid-rows-2 gap-2">
+            <div className="flex gap-2 text-sm">
+              <CheckCircle2Icon className="stroke-blue-500" />
+              <p>Strategy Overview</p>
+            </div>
+            <div className="flex gap-2 text-sm">
+              <CheckCircle2Icon className="stroke-blue-500" />
+              <p>Trade Setup</p>
+            </div>
+            <div className="flex gap-2 text-sm">
+              <CheckCircle2Icon className="stroke-blue-500" />
+              <p>Trade Thesis</p>
+            </div>
+            <div className="flex gap-2 text-sm">
+              <CheckCircle2Icon className="stroke-blue-500" />
+              <p>Exit Plan</p>
+            </div>
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          <Button>Open Creates</Button>
+          <Button asChild variant="outline">
+            <a href="https://discord.gg/Rw5RR5kJeM">Join Discord</a>
+          </Button>
+        </article>
+        <Image
+          width={1024}
+          height={1024}
+          src="/images/hedge-crate.png"
+          className="rounded-lg"
+          alt="decorative"
+        />
+        {/** Add Slider here */}
+      </section>
+      <section className="flex flex-col items-center gap-8 bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent">
+        <h1 className="text-5xl font-bold text-center">
+          We took the Stress out of Trading
+        </h1>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <div className="flex justify-between items-center">
+          <p className="flex items-center gap-2 rounded-full border border-white/30 px-2 py-1 font-bold">
+            <PackageOpenIcon /> Credits 0
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <h1 className="text-5xl font-bold">Select your Crate</h1>
+
+        <Tabs defaultValue="common" className="w-full">
+          <TabsList className="w-full">
+            <TabsTrigger value="common">Common</TabsTrigger>
+            <TabsTrigger value="rare">
+              <LockIcon />
+              Rare
+            </TabsTrigger>
+            <TabsTrigger value="epic">
+              <LockIcon />
+              Epic
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent className="w-full " value="common">
+            <Image
+              width={1024}
+              height={1024}
+              src="/images/rare-crate.png"
+              className="rounded-lg"
+              alt="decorative"
+            />
+            <article className="bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent border-2 border-white/10 p-4 rounded-lg space-y-2">
+              <h2 className="text-3xl font-medium">Type: Common</h2>
+              <p className="text-lg">Strategy: Reversal Arbitrage</p>
+              <p className="text-lg">Difficulty: Easy</p>
+              <p className="text-lg">Megin Required: True</p>
+              <p className="text-lg">Risk Level: Medium</p>
+              <Button className="w-full">
+                Generate <PackageOpenIcon /> 1
+              </Button>
+            </article>
+          </TabsContent>
+          <TabsContent value="rare">Coming Soon.</TabsContent>
+          <TabsContent value="epic">Coming Soon.</TabsContent>
+        </Tabs>
+      </section>
+
+      <section className="flex flex-col gap-4 py-10 ">
+        <article className="bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent py-4 rounded-xl space-y-4">
+          <p className="border border-blue-600/80 rounded-full w-fit px-4 py-2 text-sm bg-radial from-transparent from-20% to-blue-600/80">
+            Features
+          </p>
+          <h1 className="text-4xl font-bold">
+            Check out what Hedge Creates Offers
+          </h1>
+        </article>
+        <article className="flex flex-col gap-1  bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent p-4 rounded-xl space-y-2">
+          <div className="flex items-center gap-2">
+            <ZapIcon className="size-10 border-white border-2 rounded-lg px-1" />
+            <h1 className="text-2xl font-medium"> Instant Access </h1>
+          </div>
+          <p>
+            Just generate a card and instantly get a hedged arbitrage setup.
+          </p>
+        </article>
+        <article className="flex flex-col gap-1  bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent p-4 rounded-xl space-y-2">
+          <div className="flex items-center gap-2">
+            <ChartBarIcon className="size-10 border-white border-2 rounded-lg px-1" />
+            <h1 className="text-2xl font-medium"> Personal Dashboard </h1>
+          </div>
+          <p>
+            In your client area you can view past crates opened and setup
+            history,
+          </p>
+        </article>
+        <article className="flex flex-col gap-1  bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent p-4 rounded-xl space-y-2">
+          <div className="flex items-center gap-2">
+            <PhoneIcon className="size-10 border-white border-2 rounded-lg px-1" />
+            <h1 className="text-2xl font-medium"> 24 Hour Support </h1>
+          </div>
+          <p>Contact us via chatbot, Discord, or email at any time.</p>
+        </article>
+      </section>
+
+      <section className="flex flex-col gap-2">
+        <p className="border border-blue-600/80 rounded-full w-fit px-4 py-2 text-sm bg-radial from-transparent from-20% to-blue-600/80">
+          FAQS
+        </p>
+        <h1 className="text-4xl font-bold">Frequently Asked Questions?</h1>
+
+        <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+            <AccordionTrigger className="text-lg">
+              How are the trades generated
+            </AccordionTrigger>
+            <AccordionContent>
+              The trades are generated through our custom AI using realtime
+              market data.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </section>
+    </main>
   );
 }
