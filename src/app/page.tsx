@@ -8,9 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { signInRedirect } from "@/server/actions";
 import {
+  CalculatorIcon,
   ChartBarIcon,
   CheckCircle2Icon,
+  CloudIcon,
+  CreditCardIcon,
   LockIcon,
+  NotebookIcon,
   PackageOpenIcon,
   PhoneIcon,
   ZapIcon,
@@ -100,13 +104,21 @@ export default function Home() {
               alt="decorative"
             />
             <article className="bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent border-2 border-white/10 p-4 rounded-lg space-y-2">
-              <h2 className="text-3xl md:text-5xl font-medium">Type: Common</h2>
-              <p className="text-lg md:text-2xl">
-                Strategy: Reversal Arbitrage
+              <h2 className="text-lg md:text-2xl flex items-center gap-1">
+                <NotebookIcon />A real backtested hedging strategy
+              </h2>
+              <p className="text-lg md:text-2xl flex items-center gap-1">
+                <CalculatorIcon /> A calculated setup based on mispricings or
+                inefficiencies
               </p>
-              <p className="text-lg md:text-2xl">Difficulty: Easy</p>
-              <p className="text-lg md:text-2xl">Margin Required: True</p>
-              <p className="text-lg md:text-2xl">Risk Level: Medium</p>
+              <p className="text-lg md:text-2xl flex items-center gap-1">
+                <CloudIcon />
+                Educational insights and risk ratings
+              </p>
+              <p className="text-lg md:text-2xl flex gap-1">
+                <CreditCardIcon /> A digital card summarizing the exact trade:
+                entry, logic, and exit
+              </p>
               <Button className="w-full">
                 Generate <PackageOpenIcon /> 1
               </Button>
