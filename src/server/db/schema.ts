@@ -3,19 +3,23 @@ import {
   index,
   int,
   json,
-  mysqlEnum,
-  mysqlTable,
+  singlestoreEnum,
+  singlestoreTableCreator,
   text,
   timestamp,
-} from "drizzle-orm/mysql-core";
+} from "drizzle-orm/singlestore-core";
 
-export const usersTable = mysqlTable(
+export const createTable = singlestoreTableCreator(
+  (name) => `hedge_crates_${name}`
+);
+
+export const usersTable = createTable(
   "users_table",
   {
     id: bigint("id", { mode: "number", unsigned: true })
       .primaryKey()
       .autoincrement(),
-    clerkId: text("clerk_id").notNull().unique(),
+    clerkId: text("clerk_id").notNull(),
     credits: int("credits").notNull().default(0),
     joinedAt: timestamp("joined_at").defaultNow().notNull(),
   },
@@ -26,16 +30,14 @@ export const usersTable = mysqlTable(
 
 export type User = typeof usersTable.$inferSelect;
 
-export const cardsTable = mysqlTable(
+export const cardsTable = createTable(
   "cards_table",
   {
     id: bigint("id", { mode: "number", unsigned: true })
       .primaryKey()
       .autoincrement(),
-    userId: bigint("user_id", { mode: "number", unsigned: true })
-      .notNull()
-      .references(() => usersTable.id),
-    difficulty: mysqlEnum("difficulty", [
+    userId: bigint("user_id", { mode: "number", unsigned: true }).notNull(),
+    difficulty: singlestoreEnum("difficulty", [
       "easy",
       "intermediate",
       "hard",
@@ -44,7 +46,7 @@ export const cardsTable = mysqlTable(
     exitPlan: json("exit_plan").$type<string[]>().notNull().default([]),
     instrument: text("instrument").notNull(),
     strategy: text("strategy").notNull(),
-    rarity: mysqlEnum("rarity", ["common", "rare", "epic"]).notNull(),
+    rarity: singlestoreEnum("rarity", ["common", "rare", "epic"]).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (t) => {
@@ -54,25 +56,21 @@ export const cardsTable = mysqlTable(
 
 export type Card = typeof cardsTable.$inferSelect;
 
-export const creditsTransactionTable = mysqlTable(
+export const creditsTransactionTable = createTable(
   "credits_transaction_table",
   {
     id: bigint("id", { mode: "number", unsigned: true })
       .primaryKey()
       .autoincrement(),
-    userId: bigint("user_id", { mode: "number", unsigned: true })
-      .notNull()
-      .references(() => usersTable.id),
+    userId: bigint("user_id", { mode: "number", unsigned: true }).notNull(),
     amount: int("amount").notNull(),
-    type: mysqlEnum("type", [
+    type: singlestoreEnum("type", [
       "purchase",
       "reward",
       "crate_open",
       "other",
     ]).notNull(),
-    cardId: bigint("card_id", { mode: "number", unsigned: true }).references(
-      () => cardsTable.id
-    ),
+    cardId: bigint("card_id", { mode: "number", unsigned: true }),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (t) => {

@@ -10,6 +10,7 @@ export default async function Page() {
   const [user] = await QUERIES.getUserByClerkId(session.userId);
   if (!user) {
     const [userId] = await MUTATIONS.createNewUser(session.userId);
+    return redirect("/client");
   }
   return <></>;
 }
