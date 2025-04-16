@@ -12,5 +12,5 @@ export default async function Page() {
     const [userId] = await MUTATIONS.createNewUser(session.userId);
     return redirect("/client");
   }
-  return <></>;
+  return redirect("/client/dashboard");
 }

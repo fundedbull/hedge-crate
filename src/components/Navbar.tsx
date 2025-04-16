@@ -1,5 +1,5 @@
 "use client";
-import { MenuIcon, X } from "lucide-react";
+import { MenuIcon, PackageOpenIcon, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
@@ -16,14 +16,23 @@ export default function Navbar() {
             width={496}
             height={549}
             alt="logo"
-            className="size-10"
+            className="h-10 w-full"
           />
-          <h1 className="text-3xl font-bold">Hedge Crates</h1>
         </div>
+        <div className="flex gap-1">
+          <p className="flex items-center gap-2 rounded-full border border-white/30 px-2 py-1 font-bold">
+            <PackageOpenIcon /> <span className="hidden md:block">Credits</span>{" "}
+            0
+          </p>
 
-        <button onClick={() => setOpen(!isOpen)}>
-          {isOpen ? <X className="size-8" /> : <MenuIcon className="size-8" />}
-        </button>
+          <button onClick={() => setOpen(!isOpen)}>
+            {isOpen ? (
+              <X className="size-8" />
+            ) : (
+              <MenuIcon className="size-8" />
+            )}
+          </button>
+        </div>
       </div>
       {isOpen && (
         <ul className="space-y-6 pt-4">
