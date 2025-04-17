@@ -34,7 +34,7 @@ export function HedgingTypes() {
   ];
 
   return (
-    <Card>
+    <Card className="dark">
       <CardHeader>
         <CardTitle>Types of Hedging in Trading</CardTitle>
         <CardDescription>

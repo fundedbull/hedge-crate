@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from ".";
-import { usersTable } from "./schema";
+import { creditsTransactionTable, usersTable } from "./schema";
 import { eq } from "drizzle-orm";
 
 export const QUERIES = {
@@ -8,6 +8,10 @@ export const QUERIES = {
     return db.select().from(usersTable).where(eq(usersTable.clerkId, clerkId));
   },
 };
+
+enum MutationsErrors {
+  ERROR_USER_NOT_FOUND,
+}
 
 export const MUTATIONS = {
   createNewUser: async function (clerkId: string) {
@@ -18,5 +22,46 @@ export const MUTATIONS = {
         credits: 3,
       })
       .$returningId();
+  },
+  openCrate: async function (
+    clerkId: string,
+    crateType: "common" | "rare" | "epic"
+  ) {
+    const [user] = await QUERIES.getUserByClerkId(clerkId);
+
+    if (!user) {
+      return [false, MutationsErrors.ERROR_USER_NOT_FOUND];
+    }
+
+    // TODO: Generate card later
+
+    let credit = 0;
+    switch (crateType) {
+      case "common":
+        credit = 1;
+        break;
+      case "rare":
+        credit = 2;
+        break;
+      case "epic":
+        credit = 3;
+    }
+
+    const [userResult, creditsResult] = await Promise.all([
+      db
+        .update(usersTable)
+        .set({ credits: user.credits - credit })
+        .where(eq(usersTable.clerkId, clerkId)),
+
+      db.insert(creditsTransactionTable).values({
+        userId: user.id,
+        amount: credit,
+        type: "crate_open",
+      }),
+    ]);
+
+    console.log(userResult, creditsResult);
+
+    return [true, null];
   },
 };

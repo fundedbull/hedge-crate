@@ -29,14 +29,14 @@ export function CrateList() {
   ];
 
   return (
-    <Card>
+    <Card className="dark">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
             <CardTitle>Crates</CardTitle>
             <CardDescription>Manage your trading crates.</CardDescription>
           </div>
-          <Button>Add Crate</Button>
+          <Button>Open Crate</Button>
         </div>
       </CardHeader>
       <CardContent>

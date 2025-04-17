@@ -36,7 +36,7 @@ export function ArbitrageTypes() {
   ];
 
   return (
-    <Card>
+    <Card className="dark">
       <CardHeader>
         <CardTitle>Types of Arbitrage in Trading</CardTitle>
         <CardDescription>
