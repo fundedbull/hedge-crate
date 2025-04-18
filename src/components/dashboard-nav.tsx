@@ -11,6 +11,7 @@ import {
   Calendar,
   Settings,
   BarChart,
+  LockIcon,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -36,18 +37,18 @@ export function DashboardNav({ className, isCollapsed, ...props }: NavProps) {
     },
     {
       title: "Trades",
-      href: "/dashboard/trades",
-      icon: FileText,
+      href: "client/dashboard",
+      icon: LockIcon,
     },
     {
       title: "Calendar",
-      href: "/dashboard/calendar",
-      icon: Calendar,
+      href: "client/dashboard",
+      icon: LockIcon,
     },
     {
       title: "Reports",
-      href: "/dashboard/reports",
-      icon: BarChart,
+      href: "client/dashboard",
+      icon: LockIcon,
     },
     {
       title: "Settings",
@@ -58,9 +59,9 @@ export function DashboardNav({ className, isCollapsed, ...props }: NavProps) {
 
   return (
     <nav className={cn("flex flex-col gap-2", className)} {...props}>
-      {items.map((item) => (
+      {items.map((item, index) => (
         <Button
-          key={item.href}
+          key={index}
           variant={pathname === item.href ? "secondary" : "ghost"}
           size="sm"
           className={cn("justify-start", isCollapsed && "justify-center px-2")}

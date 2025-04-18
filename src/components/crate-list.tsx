@@ -15,19 +15,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Card as CardData } from "@/server/db/schema";
 
-export function CrateList() {
-  const crates = [
-    {
-      crate: "Common",
-      type: "Reversal Arb",
-      instrument: "TSLA",
-      setup: "",
-      date: "4/13/23",
-    },
-    // You can add more entries as needed
-  ];
-
+export function CrateList({ crates }: { crates: CardData[] }) {
   return (
     <Card className="dark">
       <CardHeader>
@@ -47,24 +37,24 @@ export function CrateList() {
                 <th className="pb-3 pl-4">CRATE</th>
                 <th className="pb-3">Type</th>
                 <th className="pb-3">Instrument</th>
-                <th className="pb-3">Setup</th>
+
                 <th className="pb-3">DATE</th>
                 <th className="pb-3 pr-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {crates.map((crate, index) => (
+              {crates.map((crate) => (
                 <tr
-                  key={index}
+                  key={crate.id}
                   className="border-b last:border-0 hover:bg-muted/50"
                 >
                   <td className="py-3 pl-4">
-                    <div className="font-medium">{crate.crate}</div>
+                    <div className="font-medium">{crate.rarity}</div>
                   </td>
-                  <td>{crate.type}</td>
+                  <td>{crate.strategy}</td>
                   <td>{crate.instrument}</td>
-                  <td>{crate.setup}</td>
-                  <td>{crate.date}</td>
+
+                  <td>{crate.createdAt.toLocaleDateString()}</td>
                   <td className="text-right pr-4">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -77,12 +67,6 @@ export function CrateList() {
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>View Details</DropdownMenuItem>
-                        <DropdownMenuItem>Edit Crate</DropdownMenuItem>
-                        <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-rose-500">
-                          Delete Crate
-                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </td>

@@ -1,11 +1,14 @@
 import "server-only";
 import { db } from ".";
-import { creditsTransactionTable, usersTable } from "./schema";
+import { cardsTable, creditsTransactionTable, usersTable } from "./schema";
 import { eq } from "drizzle-orm";
 
 export const QUERIES = {
   getUserByClerkId: function (clerkId: string) {
     return db.select().from(usersTable).where(eq(usersTable.clerkId, clerkId));
+  },
+  getCratesByUserId: function (userId: number) {
+    return db.select().from(cardsTable).where(eq(cardsTable.userId, userId));
   },
 };
 

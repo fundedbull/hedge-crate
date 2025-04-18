@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 flex flex-col p-4  border-b border-white/20 w-full max-w-screen backdrop-blur-3xl">
       <div className="flex items-center justify-between">
-        <div className="flex gap-2 items-center">
+        <Link href="/" className="flex gap-2 items-center">
           <Image
             src="/images/logo.png"
             width={496}
@@ -18,7 +18,7 @@ export default function Navbar() {
             alt="logo"
             className="h-10 w-full"
           />
-        </div>
+        </Link>
         <div className="flex gap-1">
           <p className="flex items-center gap-2 rounded-full border border-white/30 px-2 py-1 font-bold">
             <PackageOpenIcon /> <span className="hidden md:block">Credits</span>{" "}

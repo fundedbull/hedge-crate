@@ -6,7 +6,7 @@ import { CrateTypes } from "@/components/crate-types";
 export default function DashboardPage() {
   return (
     <div className="p-6 space-y-6">
-      <CrateList />
+      <CrateList crates={[]} />
       <h2 className="text-2xl font-bold mt-8 mb-4">Charts</h2>
       <HedgingTypes />
       <ArbitrageTypes />
