@@ -19,6 +19,20 @@ export default function Navbar() {
             className="h-10 w-full"
           />
         </Link>
+        <ul className="hidden md:flex flex-row gap-4 items-center">
+          <li>
+            <Link href={"/"}>About Us</Link>
+          </li>
+          <li>
+            <Link href={"/"}>FAQ</Link>
+          </li>
+          <li>
+            <Link href={"/"}>Features</Link>
+          </li>
+          <li className="">
+            <Link href="/client">Client Section</Link>
+          </li>
+        </ul>
         <div className="flex gap-1">
           <p className="flex items-center gap-2 rounded-full border border-white/30 px-2 py-1 font-bold">
             <PackageOpenIcon /> <span className="hidden md:block">Credits</span>{" "}
