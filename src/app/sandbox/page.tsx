@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { MUTATIONS } from "@/server/db/queries";
+import CreateCommonCreateHistoricalContext from "@/server/chatgpt/api";
+
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
@@ -12,7 +13,7 @@ export default async function Page() {
     <form
       action={async () => {
         "use server";
-        await MUTATIONS.openCrate(session.userId, "common");
+        await CreateCommonCreateHistoricalContext();
       }}
     >
       <h1 className="text-red-600 font-bold text-4xl">

@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import { StockTicker } from "@/components/stock-ticker";
 import {
   Accordion,
@@ -6,6 +7,18 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { signInRedirect } from "@/server/actions";
 import {
@@ -14,6 +27,7 @@ import {
   CheckCircle2Icon,
   CloudIcon,
   CreditCardIcon,
+  InfoIcon,
   ListFilterIcon,
   LockIcon,
   NotebookIcon,
@@ -144,7 +158,10 @@ export default function Home() {
         </h1>
       </section>
 
-      <section className="flex flex-col md:justify-center md:items-center gap-4">
+      <section
+        id="crates"
+        className="flex flex-col md:justify-center md:items-center gap-4"
+      >
         <h1 className="text-5xl md:text-6xl font-bold ">Select your Crate</h1>
 
         <Tabs defaultValue="common" className="w-full max-w-2xl ">
@@ -166,13 +183,45 @@ export default function Home() {
           </div>
 
           <TabsContent className="w-full " value="common">
-            <Image
-              width={1024}
-              height={1024}
-              src="/images/rare-crate.png"
-              className="rounded-lg"
-              alt="decorative"
-            />
+            <div className="w-full h-full relative">
+              <Image
+                width={1024}
+                height={1024}
+                src="/images/common-crate.png"
+                className="rounded-lg"
+                alt="decorative"
+              />
+              <HoverCard>
+                <HoverCardTrigger
+                  className="absolute hidden md:block top-1/6 right-0"
+                  asChild
+                >
+                  <InfoIcon className="size-10" />
+                </HoverCardTrigger>
+                <HoverCardContent className="w-full p-4 dark">
+                  <div className="text-lg">
+                    Ideal for: <br /> 🧠 New traders <br /> 📘 Strategy learners{" "}
+                    <br /> 🧪 Math-first thinkers
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+
+              <Dialog>
+                <DialogTrigger
+                  className="absolute md:hidden top-1/6 right-0"
+                  asChild
+                >
+                  <InfoIcon className="size-10 cursor-pointer" />
+                </DialogTrigger>
+                <DialogContent className="w-full p-4 dark">
+                  <DialogTitle>Ideal for</DialogTitle>
+                  <DialogDescription>
+                    🧠 New traders <br /> 📘 Strategy learners <br /> 🧪
+                    Math-first thinkers
+                  </DialogDescription>
+                </DialogContent>
+              </Dialog>
+            </div>
             <article className="bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent border-2 border-white/10 p-4 rounded-lg space-y-4">
               <h2 className="text-lg md:text-3xl flex items-center gap-1">
                 <NotebookIcon className="stroke-blue-600" />A real backtested
@@ -200,7 +249,7 @@ export default function Home() {
         </Tabs>
       </section>
 
-      <section className="flex flex-col gap-4 py-10 ">
+      <section id="features" className="flex flex-col gap-4 py-10 ">
         <article className="bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent py-4 rounded-xl space-y-4">
           <p className="border border-blue-600/80 rounded-full w-fit px-4 py-2 text-sm bg-radial from-transparent from-20% to-blue-600/80">
             Features
@@ -250,7 +299,7 @@ export default function Home() {
         </article>
       </section>
 
-      <section className="flex flex-col gap-2">
+      <section id="faqs" className="flex flex-col gap-2">
         <p className="border border-blue-600/80 rounded-full w-fit px-4 py-2 text-sm bg-radial from-transparent from-20% to-blue-600/80">
           FAQS
         </p>
@@ -313,6 +362,7 @@ export default function Home() {
           </AccordionItem>
         </Accordion>
       </section>
+      <Footer />
     </main>
   );
 }

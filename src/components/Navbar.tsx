@@ -4,11 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "./ui/button";
+import { SignedIn, SignOutButton } from "@clerk/nextjs";
 
 export default function Navbar() {
   const [isOpen, setOpen] = useState(false);
   return (
-    <nav className="sticky top-0 flex flex-col p-4  border-b border-white/20 w-full max-w-screen backdrop-blur-3xl">
+    <nav className="sticky z-50 top-0 flex flex-col p-4  border-b border-white/20 w-full max-w-screen backdrop-blur-3xl">
       <div className="flex items-center justify-between">
         <Link href="/" className="flex gap-2 items-center">
           <Image
@@ -21,16 +22,13 @@ export default function Navbar() {
         </Link>
         <ul className="hidden md:flex flex-row gap-4 items-center">
           <li>
-            <Link href={"/"}>About Us</Link>
+            <Link href={"#crates"}>Crates</Link>
           </li>
           <li>
-            <Link href={"/"}>FAQ</Link>
+            <Link href={"#features"}>Features</Link>
           </li>
           <li>
-            <Link href={"/"}>Features</Link>
-          </li>
-          <li className="">
-            <Link href="/client">Client Section</Link>
+            <Link href={"#faqs"}>FAQs</Link>
           </li>
         </ul>
         <div className="flex gap-1">
@@ -38,8 +36,19 @@ export default function Navbar() {
             <PackageOpenIcon /> <span className="hidden md:block">Credits</span>{" "}
             0
           </p>
-
-          <button onClick={() => setOpen(!isOpen)}>
+          <Button asChild className="hidden md:block ml-2">
+            <Link href="/client">Client Section</Link>
+          </Button>
+          <SignedIn>
+            <Button
+              asChild
+              variant="secondary"
+              className="hidden md:block ml-2"
+            >
+              <SignOutButton />
+            </Button>
+          </SignedIn>
+          <button className="md:hidden" onClick={() => setOpen(!isOpen)}>
             {isOpen ? (
               <X className="size-8" />
             ) : (
@@ -51,16 +60,25 @@ export default function Navbar() {
       {isOpen && (
         <ul className="space-y-6 pt-4">
           <li>
-            <Link href={"/"}>About Us</Link>
+            <Link href={"#crates"}>Crates</Link>
           </li>
           <li>
-            <Link href={"/"}>FAQ</Link>
+            <Link href={"#features"}>Features</Link>
           </li>
           <li>
-            <Link href={"/"}>Features</Link>
+            <Link href={"#faqs"}>FAQs</Link>
           </li>
           <li className="">
-            <Button>Client Section</Button>
+            <Button asChild className="hidden md:block ml-2">
+              <Link href="/client">Client Section</Link>
+            </Button>
+          </li>
+          <li>
+            <SignedIn>
+              <Button asChild variant="secondary" className="">
+                <SignOutButton />
+              </Button>
+            </SignedIn>
           </li>
         </ul>
       )}
