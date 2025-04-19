@@ -52,7 +52,7 @@ export function DashboardNav({ className, isCollapsed, ...props }: NavProps) {
     },
     {
       title: "Settings",
-      href: "/dashboard/settings",
+      href: "/client/dashboard/settings",
       icon: Settings,
     },
   ];

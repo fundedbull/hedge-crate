@@ -1,7 +1,7 @@
 import "server-only";
 import { db } from ".";
 import { cardsTable, creditsTransactionTable, usersTable } from "./schema";
-import { eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 export const QUERIES = {
   getUserByClerkId: function (clerkId: string) {
@@ -9,6 +9,20 @@ export const QUERIES = {
   },
   getCratesByUserId: function (userId: number) {
     return db.select().from(cardsTable).where(eq(cardsTable.userId, userId));
+  },
+  getTodayCrateOpensCount: async function (userId: number) {
+    const result = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(creditsTransactionTable)
+      .where(
+        and(
+          eq(creditsTransactionTable.userId, userId),
+          eq(creditsTransactionTable.type, "crate_open"),
+          sql`DATE(${creditsTransactionTable.createdAt}) = CURRENT_DATE`
+        )
+      );
+
+    return result[0]?.count ?? 0;
   },
 };
 
@@ -22,7 +36,7 @@ export const MUTATIONS = {
       .insert(usersTable)
       .values({
         clerkId: clerkId,
-        credits: 3,
+        credits: 9,
       })
       .$returningId();
   },
