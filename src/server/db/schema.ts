@@ -21,6 +21,10 @@ export const usersTable = createTable(
       .autoincrement(),
     clerkId: text("clerk_id").notNull(),
     credits: int("credits").notNull().default(0),
+    tier: singlestoreEnum("tier", ["no_tier", "free_tier", "pro_tier"])
+      .notNull()
+      .default("free_tier"),
+    subscribedAt: timestamp("subscribed_at").defaultNow().notNull(),
     joinedAt: timestamp("joined_at").defaultNow().notNull(),
   },
   (t) => {
