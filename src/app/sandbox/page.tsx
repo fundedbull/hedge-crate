@@ -1,3 +1,4 @@
+import HedgeCrateCard from "@/components/hedge-crate-card";
 import { Button } from "@/components/ui/button";
 import CreateCommonCreateHistoricalContext from "@/server/chatgpt/api";
 
@@ -16,6 +17,7 @@ export default async function Page() {
         await CreateCommonCreateHistoricalContext();
       }}
     >
+      <HedgeCrateCard />
       <h1 className="text-red-600 font-bold text-4xl">
         MAKE SURE THE USER EXISTS ON THE DB
       </h1>
