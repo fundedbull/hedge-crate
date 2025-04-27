@@ -16,6 +16,8 @@ import {
   ListFilter,
   Layers,
 } from "lucide-react";
+import Image from "next/image";
+import BrokerComparisonCard from "@/components/broker-comparison-card";
 
 export default function HedgeGuidePage() {
   return (
@@ -23,7 +25,7 @@ export default function HedgeGuidePage() {
       <div className="flex flex-col space-y-6">
         <div className="flex flex-col space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">
-            Hedge Crafts Guide
+            Hedge Crates Guide
           </h1>
           <p className="text-muted-foreground">
             Speed is everything in arbitrage trading. Here are 5 ways to
@@ -335,6 +337,8 @@ export default function HedgeGuidePage() {
             </Card>
           </TabsContent>
         </Tabs>
+
+        <BrokerComparisonCard />
 
         {/* <Card className="dark">
           <CardHeader>

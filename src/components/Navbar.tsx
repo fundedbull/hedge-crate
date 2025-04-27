@@ -6,7 +6,11 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { SignedIn, SignOutButton } from "@clerk/nextjs";
 
-export default function Navbar() {
+interface NavbarProps {
+  creditBalance: number;
+}
+
+export default function Navbar({ creditBalance }: NavbarProps) {
   const [isOpen, setOpen] = useState(false);
 
   return (
@@ -35,7 +39,7 @@ export default function Navbar() {
         <div className="flex gap-1">
           <p className="flex items-center gap-2 rounded-full border border-white/30 px-2 py-1 font-bold">
             <PackageOpenIcon /> <span className="hidden md:block">Credits</span>{" "}
-            {0}
+            {creditBalance}
           </p>
           <Button asChild className="hidden md:block ml-2">
             <Link href="/client">Client Section</Link>
@@ -70,7 +74,7 @@ export default function Navbar() {
             <Link href={"#faqs"}>FAQs</Link>
           </li>
           <li className="">
-            <Button asChild className="hidden md:block ml-2">
+            <Button asChild className="">
               <Link href="/client">Client Section</Link>
             </Button>
           </li>

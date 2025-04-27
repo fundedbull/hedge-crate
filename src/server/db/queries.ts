@@ -2,6 +2,7 @@ import "server-only";
 import { db } from ".";
 import { cardsTable, creditsTransactionTable, usersTable } from "./schema";
 import { and, eq, sql } from "drizzle-orm";
+import CreateCommonCreateHistoricalContext from "../chatgpt/api";
 
 export const QUERIES = {
   getUserByClerkId: function (clerkId: string) {
@@ -23,6 +24,9 @@ export const QUERIES = {
       );
 
     return result[0]?.count ?? 0;
+  },
+  getCard: async function (cardId: number) {
+    return await db.select().from(cardsTable).where(eq(cardsTable.id, cardId));
   },
 };
 
@@ -50,8 +54,8 @@ export const MUTATIONS = {
       return [false, MutationsErrors.ERROR_USER_NOT_FOUND];
     }
 
-    // TODO: Generate card later
-
+    const response = await CreateCommonCreateHistoricalContext();
+    const data = JSON.parse(response);
     let credit = 0;
     switch (crateType) {
       case "common":
@@ -64,7 +68,7 @@ export const MUTATIONS = {
         credit = 3;
     }
 
-    const [userResult, creditsResult] = await Promise.all([
+    const [userResult, creditsResult, cardResult] = await Promise.all([
       db
         .update(usersTable)
         .set({ credits: user.credits - credit })
@@ -75,10 +79,18 @@ export const MUTATIONS = {
         amount: credit,
         type: "crate_open",
       }),
+      db.insert(cardsTable).values({
+        userId: user.id,
+        setup: data["setup"],
+        exitPlan: data["exitPlan"],
+        difficulty: "easy",
+        instrument: "TSLA",
+        rarity: crateType,
+        strategy: data["strategy"],
+      }),
     ]);
 
-    console.log(userResult, creditsResult);
-
+    console.log(userResult, creditsResult, cardResult);
     return [true, null];
   },
 };
