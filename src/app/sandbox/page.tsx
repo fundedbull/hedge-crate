@@ -1,5 +1,6 @@
 import HedgeCrateCard from "@/components/hedge-crate-card";
 import { Button } from "@/components/ui/button";
+import { UpgradeModal } from "@/components/upgrade-modal";
 import CreateCommonCreateHistoricalContext from "@/server/chatgpt/api";
 
 import { auth } from "@clerk/nextjs/server";
@@ -11,17 +12,20 @@ export default async function Page() {
     return redirect("/sign-in");
   }
   return (
-    <form
-      action={async () => {
-        "use server";
-        await CreateCommonCreateHistoricalContext();
-      }}
-    >
+    <>
+      <UpgradeModal />
       <HedgeCrateCard />
-      <h1 className="text-red-600 font-bold text-4xl">
-        MAKE SURE THE USER EXISTS ON THE DB
-      </h1>
-      <Button type="submit">Create Transaction</Button>
-    </form>
+      <form
+        action={async () => {
+          "use server";
+          await CreateCommonCreateHistoricalContext();
+        }}
+      >
+        <h1 className="text-red-600 font-bold text-4xl">
+          MAKE SURE THE USER EXISTS ON THE DB
+        </h1>
+        <Button type="submit">Create Transaction</Button>
+      </form>
+    </>
   );
 }

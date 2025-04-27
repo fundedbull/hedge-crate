@@ -11,17 +11,17 @@ export default function Navbar() {
 
   return (
     <nav className="sticky z-50 top-0 flex flex-col p-4  border-b border-white/20 w-full max-w-screen backdrop-blur-3xl">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between relative">
         <Link href="/" className="flex gap-2 items-center">
           <Image
             src="/images/logo.png"
             width={496}
             height={549}
             alt="logo"
-            className="h-10 w-full"
+            className="h-10 w-40 md:w-full"
           />
         </Link>
-        <ul className="hidden md:flex flex-row gap-4 items-center">
+        <ul className="hidden md:flex flex-row gap-4 items-center absolute left-1/2 -translate-x-1/2">
           <li>
             <Link href={"#crates"}>Crates</Link>
           </li>

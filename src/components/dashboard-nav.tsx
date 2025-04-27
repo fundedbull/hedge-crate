@@ -12,6 +12,7 @@ import {
   Settings,
   BarChart,
   LockIcon,
+  BookOpen,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -29,6 +30,11 @@ export function DashboardNav({ className, isCollapsed, ...props }: NavProps) {
       title: "Dashboard",
       href: "/dashboard",
       icon: LayoutDashboard,
+    },
+    {
+      title: "Guide",
+      href: "/client/dashboard/guide",
+      icon: BookOpen,
     },
     {
       title: "Crates",

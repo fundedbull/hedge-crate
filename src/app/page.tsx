@@ -94,7 +94,7 @@ export default function Home() {
       <section className="flex flex-col md:flex-row md:justify-between gap-2">
         <article className="flex flex-col gap-4 ">
           <p className="border border-white/40 rounded-full w-fit px-4 py-2 text-sm bg-radial from-transparent from-20% to-white/40">
-            Our Creates, Your Trades
+            Our Crates, Your Trades
           </p>
           <h1 className="text-5xl md:text-6xl font-bold max-w-xl text-wrap">
             Harness the Power of AI to Find Abritrage in Hedging.
@@ -162,7 +162,7 @@ export default function Home() {
         id="crates"
         className="flex flex-col md:justify-center md:items-center gap-4"
       >
-        <h1 className="text-5xl md:text-6xl font-bold ">Select your Crate</h1>
+        <h1 className="text-4xl md:text-6xl font-bold ">Select your Crate</h1>
 
         <Tabs defaultValue="common" className="w-full max-w-2xl ">
           <div className="flex gap-2">
@@ -188,7 +188,7 @@ export default function Home() {
                 width={1024}
                 height={1024}
                 src="/images/common-crate.png"
-                className="rounded-lg"
+                className="rounded-lg p-6"
                 alt="decorative"
               />
               <HoverCard>
@@ -239,9 +239,11 @@ export default function Home() {
                 <CreditCardIcon className="stroke-blue-600" /> The exact trade:
                 entry, logic, and exit
               </p>
-              <Button className="w-full">
-                Generate <PackageOpenIcon /> 1
-              </Button>
+              <form action={signInRedirect}>
+                <Button className="w-full">
+                  Generate <PackageOpenIcon /> 1
+                </Button>
+              </form>
             </article>
           </TabsContent>
           <TabsContent value="rare">Coming Soon.</TabsContent>
@@ -255,7 +257,7 @@ export default function Home() {
             Features
           </p>
           <h1 className="text-4xl md:text-5xl font-bold">
-            Check out what Hedge Creates Offers
+            Check out what Hedge Crates Offers
           </h1>
         </article>
         <article className="flex flex-col gap-1 bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent p-4 rounded-xl space-y-2">

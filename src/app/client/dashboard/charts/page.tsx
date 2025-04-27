@@ -1,8 +1,13 @@
-import { CrateList } from "@/components/crate-list";
-import { HedgingTypes } from "@/components/hedging-types";
 import { ArbitrageTypes } from "@/components/arbitrage-types";
 import { CrateTypes } from "@/components/crate-types";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { HedgingTypes } from "@/components/hedging-types";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import {
   AlertCircle,
@@ -14,10 +19,14 @@ import {
   Clock,
   DollarSign,
   LockIcon,
+  LucideHelpCircle,
   Package,
+  PlusCircleIcon,
+  RefreshCcw,
   Scale,
   ScaleIcon,
   Shield,
+  Timer,
   Zap,
 } from "lucide-react";
 
@@ -99,10 +108,13 @@ const strategies = [
   },
 ];
 
-export default function DashboardPage() {
+export default function Page() {
   return (
-    <div className="p-6 space-y-6">
-      <CrateList crates={[]} />
+    <div className="p-4 space-y-4">
+      <h2 className="text-2xl font-bold mt-8 mb-4">Charts</h2>
+      <HedgingTypes />
+      <ArbitrageTypes />
+      <CrateTypes />
       <Card className="dark text-white">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
@@ -335,6 +347,130 @@ export default function DashboardPage() {
                   </ul>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </CardContent>
+      </Card>
+      <Card className="dark">
+        <CardHeader>
+          <h1 className=" text-2xl font-bold">Trading Confidence Levels</h1>
+        </CardHeader>
+
+        <CardContent className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <RefreshCcw className="h-6 w-6 text-blue-500" />
+                <CardTitle className="text-xl">
+                  1. Reversal / Conversion Arbitrage
+                </CardTitle>
+              </div>
+              <CardDescription className="text-sm font-medium mt-1">
+                (Buy Call + Sell Put + Long/Short Stock)
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-2">
+                  <Clock className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="font-semibold">Lifespan:</span> 1 to 5
+                    seconds in highly liquid names (like SPY, AAPL)
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <LucideHelpCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="font-semibold">Reason:</span> Market makers
+                    and HFTs squash these quickly using co-located servers
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Timer className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="font-semibold">More Stable in:</span> Less
+                    liquid underlyings or during high IV spikes
+                  </div>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Package className="h-6 w-6 text-cyan-500" />
+                <CardTitle className="text-xl">
+                  2. Box Spread Arbitrage
+                </CardTitle>
+              </div>
+              <CardDescription className="text-sm font-medium mt-1">
+                (Constructing a synthetic loan using spreads)
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-2">
+                  <Clock className="h-5 w-5 text-cyan-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="font-semibold">Lifespan:</span> Several
+                    minutes to hours in some cases
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <LucideHelpCircle className="h-5 w-5 text-cyan-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="font-semibold">Reason:</span> These are
+                    harder to spot without full chain analysis
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Timer className="h-5 w-5 text-cyan-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="font-semibold">More Stable in:</span> Deep
+                    ITM/OTM options with low retail volume
+                  </div>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <PlusCircleIcon className="text-red-500" />
+                <CardTitle className="text-xl">
+                  3. Put-Call Parity Arbitrage
+                </CardTitle>
+              </div>
+              <CardDescription className="text-sm font-medium mt-1">
+                (Call – Put ≈ Stock – PV(strike))
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-2">
+                  <Clock className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="font-semibold">Lifespan:</span>{" "}
+                    Milliseconds to a few seconds
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <LucideHelpCircle className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="font-semibold">Reason:</span> This is the
+                    bread and butter of HFT arbitrage — gets cleared fast
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Timer className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="font-semibold">More Stable in:</span>{" "}
+                    Earnings events or low-volume expirations
+                  </div>
+                </li>
+              </ul>
             </CardContent>
           </Card>
         </CardContent>

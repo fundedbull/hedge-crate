@@ -10,8 +10,8 @@ export default function Footerbar() {
   return (
     <footer className="container mx-auto mt-10">
       <div className="ml-4 flex flex-col border-b-2 border-t-2 border-gray-800 pt-8 text-left text-2xl font-medium text-white md:ml-0 md:flex-row md:justify-between md:pt-4 md:text-xl">
-        <div className="uppercase">
-          <h1 className="py-8 text-4xl font-bold text-primary-400 md:pt-0">
+        <div className="uppercase pb-4">
+          <h1 className=" text-4xl font-bold text-blue-600 md:pt-0">
             Utility Pages
           </h1>
           <ul className="pt-8 md:pt-4">
@@ -55,7 +55,7 @@ export default function Footerbar() {
         </Link>
 
         <p className="mt-4 text-left font-medium text-neutral-400 md:my-0">
-          Copyright © 2025 HEDGE CRATES | HEDGE CRATES LLC
+          Copyright © 2025 HEDGE CRATES LLC
         </p>
       </div>
     </footer>
