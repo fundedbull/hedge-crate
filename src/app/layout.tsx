@@ -3,8 +3,8 @@ import { Outfit, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
-import { QUERIES } from "@/server/db/queries";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import TanStackProvider from "./(providers)/tanstack-provider";
 
 const outfit = Outfit({
   variable: "--font-outfit-sans",
@@ -26,20 +26,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-  let credits = 0;
-  if (session.userId) {
-    const [user] = await QUERIES.getUserByClerkId(session.userId);
-    credits = user.credits;
-  }
   return (
     <ClerkProvider>
       <html lang="en">
         <body
           className={`${outfit.variable} ${geistMono.variable} antialiased bg-black text-white  container mx-auto max-w-8xl`}
         >
-          <Navbar creditBalance={credits} />
-          {children}
+          <TanStackProvider>
+            <Navbar />
+            {children}
+          </TanStackProvider>
         </body>
       </html>
     </ClerkProvider>

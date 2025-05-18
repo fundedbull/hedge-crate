@@ -5,14 +5,15 @@ import Image from "next/image";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { SignedIn, SignOutButton } from "@clerk/nextjs";
+import { useQuery } from "@tanstack/react-query";
+import { getUserCreditBalance } from "@/server/actions";
 
-interface NavbarProps {
-  creditBalance: number;
-}
-
-export default function Navbar({ creditBalance }: NavbarProps) {
+export default function Navbar() {
   const [isOpen, setOpen] = useState(false);
-
+  const query = useQuery({
+    queryKey: ["user_credits"],
+    queryFn: getUserCreditBalance,
+  });
   return (
     <nav className="sticky z-50 top-0 flex flex-col p-4  border-b border-white/20 w-full max-w-screen backdrop-blur-3xl">
       <div className="flex items-center justify-between relative">
@@ -39,7 +40,7 @@ export default function Navbar({ creditBalance }: NavbarProps) {
         <div className="flex gap-1">
           <p className="flex items-center gap-2 rounded-full border border-white/30 px-2 py-1 font-bold">
             <PackageOpenIcon /> <span className="hidden md:block">Credits</span>{" "}
-            {creditBalance}
+            {query.data ?? 0}
           </p>
           <Button asChild className="hidden md:block ml-2">
             <Link href="/client">Client Section</Link>
