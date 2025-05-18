@@ -1,4 +1,5 @@
 import Footer from "@/components/footer";
+import StockFilter from "@/components/stock-filter";
 import { StockTicker } from "@/components/stock-ticker";
 import {
   Accordion,
@@ -97,7 +98,7 @@ export default function Home() {
             Our Crates, Your Trades
           </p>
           <h1 className="text-5xl md:text-6xl font-bold max-w-xl text-wrap">
-            Harness the Power of AI to Find Abritrage in Hedging.
+            Harness the Power of AI to Find Setup in Hedging.
           </h1>
           <p>Start your free trial today!</p>
           <div className="grid grid-cols-2 grid-rows-2 gap-2">
@@ -166,9 +167,7 @@ export default function Home() {
 
         <Tabs defaultValue="common" className="w-full max-w-2xl ">
           <div className="flex gap-2">
-            <Button className="w-fit">
-              <ListFilterIcon />
-            </Button>
+            <StockFilter />
             <TabsList className="w-full">
               <TabsTrigger value="common">Common</TabsTrigger>
               <TabsTrigger value="rare" disabled>
@@ -200,12 +199,13 @@ export default function Home() {
                 </HoverCardTrigger>
                 <HoverCardContent className="w-full p-4 dark">
                   <div className="text-lg">
-                    Ideal for: <br /> 🧠 New traders <br /> 📘 Strategy learners{" "}
-                    <br /> 🧪 Math-first thinkers
+                    Ideal for: <br />
+                    🧠 New Traders <br />
+                    💸 Guaranteed Income <br /> 🛡️ Risk Control
                   </div>
                 </HoverCardContent>
               </HoverCard>
-
+              {/** for epic say experienced and instead of guarnteed say higher */}
               <Dialog>
                 <DialogTrigger
                   className="absolute md:hidden top-1/6 right-0"
@@ -216,8 +216,8 @@ export default function Home() {
                 <DialogContent className="w-full p-4 dark">
                   <DialogTitle>Ideal for</DialogTitle>
                   <DialogDescription>
-                    🧠 New traders <br /> 📘 Strategy learners <br /> 🧪
-                    Math-first thinkers
+                    🧠 New Traders <br />
+                    💸 Guaranteed Income <br /> 🛡️ Risk Control
                   </DialogDescription>
                 </DialogContent>
               </Dialog>
@@ -229,7 +229,7 @@ export default function Home() {
               </h2>
               <p className="text-lg md:text-3xl flex items-center gap-1">
                 <CalculatorIcon className="stroke-blue-600" /> A calculated
-                setup based on inefficiencies
+                setup based on options chains.
               </p>
               <p className="text-lg md:text-3xl flex items-center gap-1">
                 <CloudIcon className="stroke-blue-600" />
@@ -269,7 +269,7 @@ export default function Home() {
             </h1>
           </div>
           <p className="md:text-2xl">
-            Just generate a card and instantly get a hedged arbitrage setup.
+            Just generate a card and instantly get a hedged trading setup.
           </p>
         </article>
         <article className="flex flex-col gap-1 bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent p-4 rounded-xl space-y-2">
@@ -294,9 +294,9 @@ export default function Home() {
             </h1>
           </div>
           <p className="md:text-2xl">
-            Scan options chains and trading data, detect arbitrage
-            opportunities, generate pre-filled strategy cards, and assign them
-            to crates that users can open.
+            Scan options chains and trading data, detect hedging opportunities,
+            generate pre-filled strategy cards, and assign them to crates that
+            users can open.
           </p>
         </article>
       </section>
@@ -332,31 +332,20 @@ export default function Home() {
 
           <AccordionItem value="item-3">
             <AccordionTrigger className="text-lg md:text-2xl">
-              What is Arbitrage?
+              What is Hedge Crates?
             </AccordionTrigger>
             <AccordionContent className="md:text-lg">
-              Arbitrage is the act of buying and selling the same asset in
-              different forms or markets to profit from price differences
-              without taking on risks.
+              Hedge Crates is a gamified trading tool that delivers hedging
+              strategies in the form of unlockable collectible digital "crates".
             </AccordionContent>
           </AccordionItem>
 
           <AccordionItem value="item-4">
             <AccordionTrigger className="text-lg md:text-2xl">
-              What is Hedge Crates?
-            </AccordionTrigger>
-            <AccordionContent className="md:text-lg">
-              Hedge Crates is a gamified trading tool that delivers arbitrage
-              strategies in the form of unlockable collectible digital "crates".
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-5">
-            <AccordionTrigger className="text-lg md:text-2xl">
               What do the crate types represent?
             </AccordionTrigger>
             <AccordionContent className="md:text-lg">
-              Each crate represents the type of arbitrage, difficulty, and risk
+              Each crate represents the type of hedge, difficulty, and risk
               level you want. Common has the least risk and is the easiest to
               understand. Epic is the most risky while being the most difficult
               to understand. Rare is a combination of both Common and Epic.

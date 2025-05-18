@@ -28,8 +28,8 @@ export default function HedgeGuidePage() {
             Hedge Crates Guide
           </h1>
           <p className="text-muted-foreground">
-            Speed is everything in arbitrage trading. Here are 5 ways to
-            maximize trade execution.
+            Speed is everything in hedge trading. Here are 5 ways to maximize
+            trade execution.
           </p>
         </div>
 

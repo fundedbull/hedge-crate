@@ -24,11 +24,14 @@ import {
 const strategies = [
   {
     tier: "Common",
-    name: "The Parity Snap",
-    type: "Put-Call Parity Arbitrage",
-    risk: { level: "Low", icon: <Shield className="w-4 h-4 text-blue-500" /> },
+    name: "Ground Strike",
+    type: "Cash Secured Put",
+    risk: {
+      level: "Very Low",
+      icon: <Shield className="w-4 h-4 text-blue-500" />,
+    },
     reward: {
-      level: "Low-Mod",
+      level: "Low-Mid",
       icon: <DollarSign className="w-4 h-4 text-blue-500" />,
     },
     effort: {
@@ -47,10 +50,10 @@ const strategies = [
   },
   {
     tier: "Rare",
-    name: "The Synthetic Sweep",
-    type: "Synthetic Arbitrage",
+    name: "The Skycap",
+    type: "Covered Call",
     risk: {
-      level: "Low-Mod",
+      level: "Low-Mid",
       icon: <Shield className="w-4 h-4 text-yellow-500" />,
     },
     reward: {
@@ -62,7 +65,7 @@ const strategies = [
       icon: <Clock className="w-4 h-4 text-yellow-500" />,
     },
     frequency: {
-      level: "Medium",
+      level: "Often",
       icon: <Clock className="w-4 h-4 text-blue-500" />,
     },
     complexity: {
@@ -73,10 +76,10 @@ const strategies = [
   },
   {
     tier: "Epic",
-    name: "Box Lock Arbitrage",
-    type: "Box Spread",
+    name: "The Chain Stack",
+    type: "Combo Spread",
     risk: {
-      level: "Very Low",
+      level: "Medium",
       icon: <Shield className="w-4 h-4 text-cyan-500" />,
     },
     reward: {
@@ -88,11 +91,11 @@ const strategies = [
       icon: <BarChart className="w-4 h-4 text-red-500" />,
     },
     frequency: {
-      level: "Rare",
+      level: "Often",
       icon: <Clock className="w-4 h-4 text-blue-500" />,
     },
     complexity: {
-      level: "Precision Required",
+      level: "Hard",
       icon: <Package className="w-4 h-4 text-amber-500" />,
     },
     tierColor: "bg-green-500",
