@@ -1,44 +1,329 @@
-import HedgeCrateCard from "@/components/hedge-crate-card";
+"use client";
+import StockFilter from "@/components/stock-filter";
 import { Button } from "@/components/ui/button";
-import { UpgradeModal } from "@/components/upgrade-modal";
-import CreateCommonCreateHistoricalContext from "@/server/chatgpt/api";
-import { MUTATIONS, QUERIES } from "@/server/db/queries";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { generateCrateAction, signInRedirect } from "@/server/actions";
+import {
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+} from "@radix-ui/react-hover-card";
 
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import {
+  LockIcon,
+  InfoIcon,
+  NotebookIcon,
+  CalculatorIcon,
+  CloudIcon,
+  CreditCardIcon,
+  PackageOpenIcon,
+  ListFilterIcon,
+} from "lucide-react";
+import Image from "next/image";
+import { useActionState, useState } from "react";
 
-export default async function Page() {
-  const session = await auth();
-  if (!session.userId) {
-    return redirect("/sign-in");
+const initialState = {
+  message: "",
+  success: false,
+};
+
+export default function Page() {
+  const [state, formAction, pending] = useActionState(
+    generateCrateAction,
+    initialState
+  );
+  const [ticker, setTicker] = useState("");
+  const [broker, setBroker] = useState("");
+  const [budget, setBudget] = useState("");
+  const [riskAmount, setRiskAmount] = useState("");
+  const [rewardAmount, setRewardAmount] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const tickers = [
+    "AMC",
+    "INTC",
+    "GME",
+    "SMCI",
+    "HIMS",
+    "TEM",
+    "MU",
+    "AMD",
+    "NVDA",
+    "GOOG",
+    "AMZN",
+    "AAPL",
+    "TSLA",
+    "MSFT",
+    "META",
+  ];
+
+  const brokers = [
+    "Robinhood",
+    "Charles Schwab",
+    "E*TRADE",
+    "Interactive Brokers",
+    "Webull",
+    "Vanguard",
+    "Other",
+  ];
+
+  const calculateRRR = () => {
+    if (!riskAmount || !rewardAmount || Number(riskAmount) <= 0) return 0;
+    return (Number(rewardAmount) / Number(riskAmount)).toFixed(0);
+  };
+
+  function calculateRiskPercentage() {
+    if (!budget || !riskAmount || Number(budget) <= 0) return null;
+    const percentage = (Number(riskAmount) / Number(budget)) * 100;
+    return percentage.toFixed(1);
+  }
+
+  function calculateRewardPercentage() {
+    if (!budget || !rewardAmount || Number(budget) <= 0) return null;
+    const percentage = (Number(rewardAmount) / Number(budget)) * 100;
+    return percentage.toFixed(1);
   }
   return (
-    <>
-      <UpgradeModal />
-      <HedgeCrateCard />
-      <form
-        action={async () => {
-          "use server";
-          await CreateCommonCreateHistoricalContext();
-        }}
+    <main>
+      <section
+        id="crates"
+        className="flex flex-col md:justify-center md:items-center gap-4"
       >
-        <h1 className="text-red-600 font-bold text-4xl">
-          MAKE SURE THE USER EXISTS ON THE DB
-        </h1>
-        <Button type="submit">Create Transaction</Button>
-      </form>
+        <h1 className="text-4xl md:text-6xl font-bold ">Select your Crate</h1>
+        {state.success && <h1>{state.message}</h1>}
+        <Tabs defaultValue="common" className="w-full max-w-2xl ">
+          <div className="flex gap-2">
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button className="w-fit dark">
+                  <ListFilterIcon />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 dark">
+                <Card className="border-0 shadow-none dark">
+                  <CardContent className="px-0 space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="ticker" className="flex">
+                        Select Ticker{" "}
+                        <span className="text-red-500 ml-1">*</span>
+                      </Label>
+                      <Select value={ticker} onValueChange={setTicker} required>
+                        <SelectTrigger id="ticker">
+                          <SelectValue placeholder="Select a stock" />
+                        </SelectTrigger>
+                        <SelectContent className="dark">
+                          {tickers.map((t) => (
+                            <SelectItem key={t} value={t}>
+                              {t}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-      <form
-        action={async () => {
-          "use server";
-          await MUTATIONS.openCrate(session.userId, "common");
-          const [user] = await QUERIES.getUserByClerkId(session.userId);
-          const crate = await QUERIES.getCratesByUserId(user.id);
-          return redirect(`/sandbox/${crate[0].id}`);
-        }}
-      >
-        <Button type="submit">Generate Card</Button>
-      </form>
-    </>
+                    <div className="space-y-2">
+                      <Label htmlFor="broker" className="flex">
+                        Select Broker{" "}
+                        <span className="text-red-500 ml-1">*</span>
+                      </Label>
+                      <Select value={broker} onValueChange={setBroker} required>
+                        <SelectTrigger id="broker">
+                          <SelectValue placeholder="Select your broker" />
+                        </SelectTrigger>
+                        <SelectContent className="dark">
+                          {brokers.map((b) => (
+                            <SelectItem key={b} value={b}>
+                              {b}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="budget" className="flex">
+                        Budget <span className="text-red-500 ml-1">*</span>
+                      </Label>
+                      <Input
+                        id="budget"
+                        type="number"
+                        placeholder="Enter your budget"
+                        value={budget}
+                        onChange={(e) => setBudget(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-4">
+                      <Label className="flex">
+                        Risk and Reward (in $){" "}
+                        <span className="text-red-500 ml-1">*</span>
+                      </Label>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="risk-amount"
+                            className="text-sm text-muted-foreground"
+                          >
+                            Risk Amount
+                          </Label>
+                          <Input
+                            id="risk-amount"
+                            type="number"
+                            placeholder="Risk in $"
+                            value={riskAmount}
+                            onChange={(e) => setRiskAmount(e.target.value)}
+                            required
+                          />
+                          {calculateRiskPercentage() && (
+                            <div className="text-xs text-muted-foreground">
+                              {calculateRiskPercentage()}% of budget
+                            </div>
+                          )}
+                        </div>
+                        <div className="space-y-2">
+                          <Label
+                            htmlFor="reward-amount"
+                            className="text-sm text-muted-foreground"
+                          >
+                            Reward Amount
+                          </Label>
+                          <Input
+                            id="reward-amount"
+                            type="number"
+                            placeholder="Reward in $"
+                            value={rewardAmount}
+                            onChange={(e) => setRewardAmount(e.target.value)}
+                            required
+                          />
+                          {calculateRewardPercentage() && (
+                            <div className="text-xs text-muted-foreground">
+                              {calculateRewardPercentage()}% of budget
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-end">
+                        <span className="text-sm font-medium">
+                          Risk-Reward Ratio:{" "}
+                          {calculateRRR() ? `1:${calculateRRR()}` : "N/A"}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </PopoverContent>
+            </Popover>
+            <TabsList className="w-full">
+              <TabsTrigger value="common">Common</TabsTrigger>
+              <TabsTrigger value="rare" disabled>
+                <LockIcon />
+                Rare
+              </TabsTrigger>
+              <TabsTrigger value="epic" disabled>
+                <LockIcon />
+                Epic
+              </TabsTrigger>
+            </TabsList>
+          </div>
+
+          <TabsContent className="w-full " value="common">
+            <div className="w-full h-full relative">
+              <Image
+                width={1024}
+                height={1024}
+                src="/images/common-crate.png"
+                className="rounded-lg p-6"
+                alt="decorative"
+              />
+              <HoverCard>
+                <HoverCardTrigger
+                  className="absolute hidden md:block top-1/6 right-0"
+                  asChild
+                >
+                  <InfoIcon className="size-10" />
+                </HoverCardTrigger>
+                <HoverCardContent className="w-full p-4 dark">
+                  <div className="text-lg">
+                    Ideal for: <br />
+                    🧠 New Traders <br />
+                    💸 Guaranteed Income <br /> 🛡️ Risk Control
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+              {/** for epic say experienced and instead of guarnteed say higher */}
+              <Dialog>
+                <DialogTrigger
+                  className="absolute md:hidden top-1/6 right-0"
+                  asChild
+                >
+                  <InfoIcon className="size-10 cursor-pointer" />
+                </DialogTrigger>
+                <DialogContent className="w-full p-4 dark">
+                  <DialogTitle>Ideal for</DialogTitle>
+                  <DialogDescription>
+                    🧠 New Traders <br />
+                    💸 Guaranteed Income <br /> 🛡️ Risk Control
+                  </DialogDescription>
+                </DialogContent>
+              </Dialog>
+            </div>
+            <article className="bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent border-2 border-white/10 p-4 rounded-lg space-y-4">
+              <h2 className="text-lg md:text-3xl flex items-center gap-1">
+                <NotebookIcon className="stroke-blue-600" />A real backtested
+                hedging strategy
+              </h2>
+              <p className="text-lg md:text-3xl flex items-center gap-1">
+                <CalculatorIcon className="stroke-blue-600" /> A calculated
+                setup based on options chains.
+              </p>
+              <p className="text-lg md:text-3xl flex items-center gap-1">
+                <CloudIcon className="stroke-blue-600" />
+                Educational insights and risk ratings
+              </p>
+              <p className="text-lg md:text-3xl flex gap-1">
+                <CreditCardIcon className="stroke-blue-600" /> The exact trade:
+                entry, logic, and exit
+              </p>
+              <form action={formAction}>
+                <input type="hidden" name="ticker" value={ticker} />
+                <input type="hidden" name="type" value={"common"} />
+                <input type="hidden" name="broker" value={broker} />
+                <input type="hidden" name="budget" value={budget} />
+                <input type="hidden" name="riskAmount" value={riskAmount} />
+                <input type="hidden" name="rewardAmount" value={rewardAmount} />
+                <Button className="w-full">
+                  Generate <PackageOpenIcon /> 1
+                </Button>
+              </form>
+            </article>
+          </TabsContent>
+          <TabsContent value="rare">Coming Soon.</TabsContent>
+          <TabsContent value="epic">Coming Soon.</TabsContent>
+        </Tabs>
+      </section>
+    </main>
   );
 }
