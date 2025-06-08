@@ -7,43 +7,44 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import Image from "next/image";
 export default function BrokerComparisonCard() {
   const brokers = [
     {
+      name: "Webull",
+      rank: "https://a.webull.com/BBxteQGIgeHFQqmLj2",
+      medal: "/images/webull.png",
+      strengths: "Good mobile access, fast enough for casual trades",
+      weaknesses: "No advanced order types",
+    },
+
+    {
+      name: "Robinhood",
+      rank: "https://join.robinhood.com/michaer-1ebc58",
+      medal: "/images/robinhood.webp",
+      strengths: "Super simple UX, quick entry for beginners",
+      weaknesses: "Slow Greeks updates, spread risk",
+    },
+    {
+      name: "MooMoo",
+      rank: "https://j.moomoo.com/08ENBA",
+      medal: "/images/moomoo.jpg",
+      strengths: "Institutional-grade speed, tight spreads",
+      weaknesses: "Complex UI, learning curve",
+    },
+    {
       name: "Tastytrade",
-      rank: 1,
-      medal: "🥇",
+      rank: "https://open.tastytrade.com/signup?referralCode=WD95ESFEXP",
+      medal: "/images/seo-tasty.webp",
       strengths: "Fast routing, combo orders, real-time IV",
       weaknesses: "Slightly complex for beginners",
     },
     {
       name: "ThinkorSwim",
-      rank: 2,
-      medal: "🥈",
+      rank: "https://www.schwab.com/client-referral?refrid=REFERFCPPM224",
+      medal: "/images/thinkerswim.png",
       strengths: "Professional tools, quick refresh, risk graphs",
       weaknesses: "Heavier desktop app",
-    },
-    {
-      name: "Interactive Brokers",
-      rank: 3,
-      medal: "🥉",
-      strengths: "Institutional-grade speed, tight spreads",
-      weaknesses: "Complex UI, learning curve",
-    },
-    {
-      name: "Webull",
-      rank: 4,
-      medal: "🏅",
-      strengths: "Good mobile access, fast enough for casual trades",
-      weaknesses: "No advanced order types",
-    },
-    {
-      name: "Robinhood",
-      rank: 5,
-      medal: "🎖️",
-      strengths: "Super simple UX, quick entry for beginners",
-      weaknesses: "Slow Greeks updates, spread risk",
     },
   ];
 
@@ -61,7 +62,7 @@ export default function BrokerComparisonCard() {
               <TableHead className="text-zinc-300 font-medium">
                 Broker
               </TableHead>
-              <TableHead className="text-zinc-300 font-medium">Rank</TableHead>
+              <TableHead className="text-zinc-300 font-medium">Join</TableHead>
               <TableHead className="text-zinc-300 font-medium">
                 Strengths
               </TableHead>
@@ -73,16 +74,34 @@ export default function BrokerComparisonCard() {
           <TableBody>
             {brokers.map((broker) => (
               <TableRow key={broker.name} className="border-zinc-700">
-                <TableCell className="font-medium">{broker.name}</TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-1">
-                    <span>{broker.medal}</span>
-                    <span>#{broker.rank}</span>
-                  </div>
+                <TableCell className="font-medium">
+                  <a href={broker.rank} className="text-center w-full h-full">
+                    {broker.name}
+                  </a>
                 </TableCell>
-                <TableCell>{broker.strengths}</TableCell>
+
+                <TableCell>
+                  <a href={broker.rank} className="flex items-center gap-1">
+                    <Image
+                      src={broker.medal}
+                      width={64}
+                      height={64}
+                      alt="Picture of the author"
+                      className="min-w-[64px] min-h-[64px] object-contain"
+                    />
+                  </a>
+                </TableCell>
+
+                <TableCell>
+                  <a href={broker.rank} className="text-center w-full h-full">
+                    {broker.strengths}
+                  </a>
+                </TableCell>
+
                 <TableCell className="text-zinc-300">
-                  {broker.weaknesses}
+                  <a href={broker.rank} className="text-center w-full h-full">
+                    {broker.weaknesses}
+                  </a>
                 </TableCell>
               </TableRow>
             ))}

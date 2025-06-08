@@ -98,7 +98,7 @@ export default function Home() {
             Our Crates, Your Trades
           </p>
           <h1 className="text-5xl md:text-6xl font-bold max-w-xl text-wrap">
-            Harness the Power of AI to Find Setup in Hedging.
+            Harness the Power of AI to Find Setups for Hedging.
           </h1>
           <p>Start your free trial today!</p>
           <div className="grid grid-cols-2 grid-rows-2 gap-2">

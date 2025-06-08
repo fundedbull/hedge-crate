@@ -2,7 +2,7 @@ import "server-only";
 import { db } from ".";
 import { cardsTable, creditsTransactionTable, usersTable } from "./schema";
 import { and, eq, sql } from "drizzle-orm";
-import CreateCommonCreateHistoricalContext from "../chatgpt/api";
+import { CreateCommonCreateHistoricalContext } from "../chatgpt/api";
 
 export const QUERIES = {
   getUserByClerkId: function (clerkId: string) {

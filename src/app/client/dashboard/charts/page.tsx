@@ -33,11 +33,14 @@ import {
 const strategies = [
   {
     tier: "Common",
-    name: "The Parity Snap",
-    type: "Put-Call Parity Arbitrage",
-    risk: { level: "Low", icon: <Shield className="w-4 h-4 text-blue-500" /> },
+    name: "Ground Strike",
+    type: "Cash Secured Put",
+    risk: {
+      level: "Very Low",
+      icon: <Shield className="w-4 h-4 text-blue-500" />,
+    },
     reward: {
-      level: "Low-Mod",
+      level: "Low-Mid",
       icon: <DollarSign className="w-4 h-4 text-blue-500" />,
     },
     effort: {
@@ -56,10 +59,10 @@ const strategies = [
   },
   {
     tier: "Rare",
-    name: "The Synthetic Sweep",
-    type: "Synthetic Arbitrage",
+    name: "The Skycap",
+    type: "Covered Call",
     risk: {
-      level: "Low-Mod",
+      level: "Low-Mid",
       icon: <Shield className="w-4 h-4 text-yellow-500" />,
     },
     reward: {
@@ -71,7 +74,7 @@ const strategies = [
       icon: <Clock className="w-4 h-4 text-yellow-500" />,
     },
     frequency: {
-      level: "Medium",
+      level: "Often",
       icon: <Clock className="w-4 h-4 text-blue-500" />,
     },
     complexity: {
@@ -82,10 +85,10 @@ const strategies = [
   },
   {
     tier: "Epic",
-    name: "Box Lock Arbitrage",
-    type: "Box Spread",
+    name: "The Chain Stack",
+    type: "Combo Spread",
     risk: {
-      level: "Very Low",
+      level: "Medium",
       icon: <Shield className="w-4 h-4 text-cyan-500" />,
     },
     reward: {
@@ -97,11 +100,11 @@ const strategies = [
       icon: <BarChart className="w-4 h-4 text-red-500" />,
     },
     frequency: {
-      level: "Rare",
+      level: "Often",
       icon: <Clock className="w-4 h-4 text-blue-500" />,
     },
     complexity: {
-      level: "Precision Required",
+      level: "Hard",
       icon: <Package className="w-4 h-4 text-amber-500" />,
     },
     tierColor: "bg-green-500",
@@ -112,9 +115,7 @@ export default function Page() {
   return (
     <div className="p-4 space-y-4">
       <h2 className="text-2xl font-bold mt-8 mb-4">Charts</h2>
-      <HedgingTypes />
-      <ArbitrageTypes />
-      <CrateTypes />
+
       <Card className="dark text-white">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
@@ -361,12 +362,10 @@ export default function Page() {
             <CardHeader>
               <div className="flex items-center gap-2">
                 <RefreshCcw className="h-6 w-6 text-blue-500" />
-                <CardTitle className="text-xl">
-                  1. Reversal / Conversion Arbitrage
-                </CardTitle>
+                <CardTitle className="text-xl">1. Common Crate</CardTitle>
               </div>
               <CardDescription className="text-sm font-medium mt-1">
-                (Buy Call + Sell Put + Long/Short Stock)
+                (Cash-Secured Put)
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -374,22 +373,30 @@ export default function Page() {
                 <li className="flex items-start gap-2">
                   <Clock className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <span className="font-semibold">Lifespan:</span> 1 to 5
-                    seconds in highly liquid names (like SPY, AAPL)
+                    <span className="font-semibold">Core Idea:</span> Generate
+                    premium while setting aside cash to buy stock at a discount
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
                   <LucideHelpCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <span className="font-semibold">Reason:</span> Market makers
-                    and HFTs squash these quickly using co-located servers
+                    <span className="font-semibold">Best For:</span> Steady
+                    income, moderate bullish bias, safe entry points
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
                   <Timer className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <span className="font-semibold">More Stable in:</span> Less
-                    liquid underlyings or during high IV spikes
+                    <span className="font-semibold">Most Effective When:</span>{" "}
+                    IV is elevated, Delta 0.30-0.45, solid volume
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Shield className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="font-semibold">Risk Level:</span> Low to
+                    Moderate — you&apos;re collateralized but still exposed to
+                    stock downside
                   </div>
                 </li>
               </ul>
@@ -399,36 +406,42 @@ export default function Page() {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Package className="h-6 w-6 text-cyan-500" />
-                <CardTitle className="text-xl">
-                  2. Box Spread Arbitrage
-                </CardTitle>
+                <Package className="h-6 w-6 text-purple-500" />
+                <CardTitle className="text-xl">3. Rare Crate</CardTitle>
               </div>
               <CardDescription className="text-sm font-medium mt-1">
-                (Constructing a synthetic loan using spreads)
+                (Covered Call)
               </CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
-                  <Clock className="h-5 w-5 text-cyan-500 mt-0.5 flex-shrink-0" />
+                  <Clock className="h-5 w-5 text-purple-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <span className="font-semibold">Lifespan:</span> Several
-                    minutes to hours in some cases
+                    <span className="font-semibold">Core Idea:</span> Earn
+                    income by selling calls on shares you own, capping your
+                    upside
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
-                  <LucideHelpCircle className="h-5 w-5 text-cyan-500 mt-0.5 flex-shrink-0" />
+                  <LucideHelpCircle className="h-5 w-5 text-purple-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <span className="font-semibold">Reason:</span> These are
-                    harder to spot without full chain analysis
+                    <span className="font-semibold">Best For:</span>{" "}
+                    Neutral-to-bullish markets, stocks you want to hold
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Timer className="h-5 w-5 text-cyan-500 mt-0.5 flex-shrink-0" />
+                  <Timer className="h-5 w-5 text-purple-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <span className="font-semibold">More Stable in:</span> Deep
-                    ITM/OTM options with low retail volume
+                    <span className="font-semibold">Most Effective When:</span>{" "}
+                    Moderate IV, Delta 0.25–0.40, strong open interest
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Shield className="h-5 w-5 text-purple-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="font-semibold">Risk Level:</span> Moderate
+                    — you limit upside but keep downside exposure on shares
                   </div>
                 </li>
               </ul>
@@ -438,36 +451,42 @@ export default function Page() {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <PlusCircleIcon className="text-red-500" />
-                <CardTitle className="text-xl">
-                  3. Put-Call Parity Arbitrage
-                </CardTitle>
+                <Zap className="h-6 w-6 text-pink-500" />
+                <CardTitle className="text-xl">4. Epic Crate</CardTitle>
               </div>
               <CardDescription className="text-sm font-medium mt-1">
-                (Call – Put ≈ Stock – PV(strike))
+                (Hybrid Hedged Combo)
               </CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
-                  <Clock className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+                  <Clock className="h-5 w-5 text-pink-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <span className="font-semibold">Lifespan:</span>{" "}
-                    Milliseconds to a few seconds
+                    <span className="font-semibold">Core Idea:</span> Use option
+                    income to partially or fully finance directional hedged bets
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
-                  <LucideHelpCircle className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+                  <LucideHelpCircle className="h-5 w-5 text-pink-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <span className="font-semibold">Reason:</span> This is the
-                    bread and butter of HFT arbitrage — gets cleared fast
+                    <span className="font-semibold">Best For:</span> Advanced
+                    setups like risk reversals, combos, or event-driven plays
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Timer className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+                  <Timer className="h-5 w-5 text-pink-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <span className="font-semibold">More Stable in:</span>{" "}
-                    Earnings events or low-volume expirations
+                    <span className="font-semibold">Most Effective When:</span>{" "}
+                    Implied volatility skew exists; balance Delta and Vega
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Shield className="h-5 w-5 text-pink-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="font-semibold">Risk Level:</span> High —
+                    layered trades require precise execution and carry combo
+                    risk
                   </div>
                 </li>
               </ul>

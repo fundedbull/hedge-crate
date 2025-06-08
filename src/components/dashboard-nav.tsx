@@ -13,6 +13,10 @@ import {
   BarChart,
   LockIcon,
   BookOpen,
+  Landmark,
+  PiggyBank,
+  Coins,
+  CircleDollarSign,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -31,11 +35,7 @@ export function DashboardNav({ className, isCollapsed, ...props }: NavProps) {
       href: "/dashboard",
       icon: LayoutDashboard,
     },
-    {
-      title: "Guide",
-      href: "/client/dashboard/guide",
-      icon: BookOpen,
-    },
+
     {
       title: "Crates",
       href: "/dashboard/crates",
@@ -47,14 +47,24 @@ export function DashboardNav({ className, isCollapsed, ...props }: NavProps) {
       icon: LockIcon,
     },
     {
-      title: "Calendar",
+      title: "News",
       href: "client/dashboard",
       icon: LockIcon,
     },
     {
-      title: "Reports",
-      href: "client/dashboard",
-      icon: LockIcon,
+      title: "Brokers",
+      href: "/client/dashboard/brokers",
+      icon: PiggyBank,
+    },
+    {
+      title: "Guide",
+      href: "/client/dashboard/guide",
+      icon: BookOpen,
+    },
+    {
+      title: "Rewards",
+      href: "/client/dashboard/rewards",
+      icon: CircleDollarSign,
     },
     {
       title: "Settings",
