@@ -104,9 +104,10 @@ For your selected option, calculate:
 - Cash required to secure: strike_price * 100 * number_of_contracts
 
 ## OUTPUT FORMAT
-Return ONLY a valid JSON object with this exact structure:
+Return ONLY a valid JSON object with this exact structure, if you found a valid option (ENSURE found is true):
 
 {
+  "found": true,
   "ticker": "SYMBOL",
   "strike": 0.00,
   "expiration": "YYYY-MM-DD",
@@ -121,6 +122,26 @@ Return ONLY a valid JSON object with this exact structure:
   "exit_plan": "Comprehensive exit scenarios with specific conditions and actions",
   "risk_assessment": "Key risks and mitigation strategies",
   "reasoning": "Why this option was selected over others"
+}
+
+Return ONLY a valid JSON object with this exact structure, if you found no valid option (ENSURE found is false):
+
+{
+  "found": false,
+  "ticker": "",
+  "strike": 0.00,
+  "expiration": "",
+  "contract": "",
+  "contracts_to_sell": 0,
+  "premium_per_contract": 0.00,
+  "total_premium_income": 0.00,
+  "cash_required": 0.00,
+  "annualized_yield": 0.00,
+  "break_even_price": 0.00,
+  "setup_plan": "",
+  "exit_plan": "",
+  "risk_assessment": "",
+  "reasoning": ""
 }
 
 ## SETUP PLAN TEMPLATE
