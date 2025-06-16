@@ -2,7 +2,6 @@ import "server-only";
 import { db } from ".";
 import { cardsTable, creditsTransactionTable, usersTable } from "./schema";
 import { and, eq, sql } from "drizzle-orm";
-import { CreateCommonCreateHistoricalContext } from "../chatgpt/api";
 
 export const QUERIES = {
   getUserByClerkId: function (clerkId: string) {
@@ -44,6 +43,7 @@ export const MUTATIONS = {
       })
       .$returningId();
   },
+  /*
   openCrate: async function (
     clerkId: string,
     crateType: "common" | "rare" | "epic"
@@ -93,4 +93,5 @@ export const MUTATIONS = {
     console.log(userResult, creditsResult, cardResult);
     return [true, null];
   },
+  */
 };

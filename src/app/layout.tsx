@@ -36,10 +36,14 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${outfit.variable} ${geistMono.variable} antialiased bg-black text-white  max-w-7xl container mx-auto overflow-x-auto`}
+          className={`${outfit.variable} ${geistMono.variable} antialiased bg-black text-white`}
         >
-          <Navbar creditBalance={credits} />
-          {children}
+          <div className="max-w-7xl mx-auto">
+            <Navbar creditBalance={credits} />
+            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)]">
+              {children}
+            </div>
+          </div>
         </body>
       </html>
     </ClerkProvider>
