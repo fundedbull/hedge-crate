@@ -1,7 +1,13 @@
 "use client";
 import StockFilter from "@/components/stock-filter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -40,9 +46,10 @@ import {
   CreditCardIcon,
   PackageOpenIcon,
   ListFilterIcon,
+  XIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 const initialState = {
   message: "",
@@ -89,6 +96,15 @@ export default function Page() {
     "Other",
   ];
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  // In your useEffect or wherever you detect success:
+  useEffect(() => {
+    if (state.success && state.message) {
+      setDialogOpen(true);
+    }
+  }, [state.success, state.message]);
+
   const calculateRRR = () => {
     if (!riskAmount || !rewardAmount || Number(riskAmount) <= 0) return 0;
     return (Number(rewardAmount) / Number(riskAmount)).toFixed(0);
@@ -112,7 +128,21 @@ export default function Page() {
         className="flex flex-col md:justify-center md:items-center gap-4"
       >
         <h1 className="text-4xl md:text-6xl font-bold ">Select your Crate</h1>
-        {state.success && <h1>{state.message}</h1>}
+        {/* Options Response Dialog */}
+        {dialogOpen && (
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto dark">
+              <DialogTitle>ASTS Common Crate</DialogTitle>
+              <DialogDescription>
+                This is a cash-secured put selling strategy where you sell put
+                option contracts to generate immediate premium income.
+              </DialogDescription>
+              <div className="mt-4">
+                <p>{state.message}</p>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
         <Tabs defaultValue="common" className="w-full max-w-2xl ">
           <div className="flex gap-2">
             <Popover open={open} onOpenChange={setOpen}>

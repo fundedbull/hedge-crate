@@ -170,10 +170,7 @@ export default function Home() {
             <StockFilter />
             <TabsList className="w-full">
               <TabsTrigger value="common">Common</TabsTrigger>
-              <TabsTrigger value="rare" disabled>
-                <LockIcon />
-                Rare
-              </TabsTrigger>
+              <TabsTrigger value="rare">Rare</TabsTrigger>
               <TabsTrigger value="epic" disabled>
                 <LockIcon />
                 Epic
@@ -246,7 +243,71 @@ export default function Home() {
               </form>
             </article>
           </TabsContent>
-          <TabsContent value="rare">Coming Soon.</TabsContent>
+          <TabsContent className="w-full " value="rare">
+            <div className="w-full h-full relative">
+              <Image
+                width={1024}
+                height={1024}
+                src="/images/rare-crate.png"
+                className="rounded-lg p-6"
+                alt="decorative"
+              />
+              <HoverCard>
+                <HoverCardTrigger
+                  className="absolute hidden md:block top-1/6 right-0"
+                  asChild
+                >
+                  <InfoIcon className="size-10" />
+                </HoverCardTrigger>
+                <HoverCardContent className="w-full p-4 dark">
+                  <div className="text-lg">
+                    Ideal for: <br />
+                    🧠 New Traders <br />
+                    💸 Guaranteed Income <br /> 🛡️ Risk Control
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+              {/** for epic say experienced and instead of guarnteed say higher */}
+              <Dialog>
+                <DialogTrigger
+                  className="absolute md:hidden top-1/6 right-0"
+                  asChild
+                >
+                  <InfoIcon className="size-10 cursor-pointer" />
+                </DialogTrigger>
+                <DialogContent className="w-full p-4 dark">
+                  <DialogTitle>Ideal for</DialogTitle>
+                  <DialogDescription>
+                    🧠 Intermediate Traders <br />
+                    💸 Guaranteed Income <br /> 🛡️ Risk Control
+                  </DialogDescription>
+                </DialogContent>
+              </Dialog>
+            </div>
+            <article className="bg-gradient-to-r from-transparent from-25%% via-blue-600/20 via-50% to-transparent border-2 border-white/10 p-4 rounded-lg space-y-4">
+              <h2 className="text-lg md:text-3xl flex items-center gap-1">
+                <NotebookIcon className="stroke-blue-600" />A real backtested
+                hedging strategy
+              </h2>
+              <p className="text-lg md:text-3xl flex items-center gap-1">
+                <CalculatorIcon className="stroke-blue-600" /> A calculated
+                setup based on options chains.
+              </p>
+              <p className="text-lg md:text-3xl flex items-center gap-1">
+                <CloudIcon className="stroke-blue-600" />
+                Educational insights and risk ratings
+              </p>
+              <p className="text-lg md:text-3xl flex gap-1">
+                <CreditCardIcon className="stroke-blue-600" /> The exact trade:
+                entry, logic, and exit
+              </p>
+              <form action={signInRedirect}>
+                <Button className="w-full">
+                  Generate <PackageOpenIcon /> 1
+                </Button>
+              </form>
+            </article>
+          </TabsContent>
           <TabsContent value="epic">Coming Soon.</TabsContent>
         </Tabs>
       </section>
