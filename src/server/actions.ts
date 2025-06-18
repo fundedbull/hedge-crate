@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { findOptions } from "./polygon/api";
 import { CreateCommonCrate } from "./chatgpt/api";
+import { findCoveredCallOptions } from "./polygon/covered-calls";
 
 interface FormEntries {
   ticker: string;
@@ -136,4 +137,14 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
       success: false,
     };
   }
+}
+
+export async function generateRareCrateAction() {
+  const options = await findCoveredCallOptions(
+    ["ASTS"],
+    { ["ASTS"]: 100 },
+    0.05,
+    "2025-06-28"
+  );
+  console.log(options);
 }

@@ -30,7 +30,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { generateCrateAction, signInRedirect } from "@/server/actions";
+import {
+  generateCrateAction,
+  generateRareCrateAction,
+  signInRedirect,
+} from "@/server/actions";
 import {
   HoverCard,
   HoverCardTrigger,
@@ -143,6 +147,14 @@ export default function Page() {
             </DialogContent>
           </Dialog>
         )}
+
+        <Button
+          onClick={() => {
+            generateRareCrateAction();
+          }}
+        >
+          Rare
+        </Button>
         <Tabs defaultValue="common" className="w-full max-w-2xl ">
           <div className="flex gap-2">
             <Popover open={open} onOpenChange={setOpen}>
