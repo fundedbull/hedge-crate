@@ -2,7 +2,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { findOptions } from "./polygon/api";
-import { CreateCommonCrate } from "./chatgpt/api";
+import { CreateCommonCrate, CreateRareCrate } from "./chatgpt/api";
 import { findCoveredCallOptions } from "./polygon/covered-calls";
 
 interface FormEntries {
@@ -147,4 +147,7 @@ export async function generateRareCrateAction() {
     "2025-06-28"
   );
   console.log(options);
+
+  const res = await CreateRareCrate(10000, 0.05, options);
+  console.log(res);
 }
