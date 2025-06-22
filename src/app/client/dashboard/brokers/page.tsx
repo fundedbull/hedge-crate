@@ -72,13 +72,7 @@ export default function HedgeGuidePage() {
                         open interest
                       </span>
                     </li>
-                    <li className="flex items-start gap-2">
-                      <div className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500" />
-                      <span>
-                        Advanced options chain with real-time Greeks, IV rank,
-                        open interest
-                      </span>
-                    </li>
+
                     <li className="flex items-start gap-2">
                       <div className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500" />
                       <span>
@@ -91,33 +85,31 @@ export default function HedgeGuidePage() {
 
                 <Separator />
 
-                <div className="space-y-4">
-                  <h3 className="font-medium">Best Options:</h3>
+                <div className="space-y-4 p-6">
                   <div className="grid gap-4 md:grid-cols-3">
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-base">Tastyrade</CardTitle>
-                        <CardDescription>
-                          Fast option routing, vertical spreads
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-base">IBKR</CardTitle>
-                        <CardDescription>
-                          Trader Workstation — full pro suite
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-base">ThinkorSwim</CardTitle>
-                        <CardDescription>
-                          TD Ameritrade — hotkeys + scripting
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
+                    <div className="aspect-video w-full bg-gradient-to-br from-blue-500 to-purple-600">
+                      <img
+                        src="/images/webull-dashboard.png"
+                        alt="Tastyrade platform interface"
+                        className="w-full h-full object-fill"
+                      />
+                    </div>
+
+                    <div className="aspect-video w-full bg-gradient-to-br from-green-500 to-teal-600">
+                      <img
+                        src="/images/webull-dashboard2.png"
+                        alt="IBKR Trader Workstation interface"
+                        className="w-full h-full object-fill"
+                      />
+                    </div>
+
+                    <div className="aspect-video w-full bg-gradient-to-br from-orange-500 to-red-600">
+                      <img
+                        src="/images/webull-dashboard3.png"
+                        alt="ThinkorSwim platform interface"
+                        className="w-full h-full object-fill"
+                      />
+                    </div>
                   </div>
                 </div>
               </CardContent>

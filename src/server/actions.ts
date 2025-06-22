@@ -90,10 +90,10 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
   // Extract and process form data with defaults
   const data = processFormData(formData);
 
-  const budget = data.budget;
-  const targetYieldPercent = data.targetYieldPercent;
-  const expiration = "2025-06-14";
-  const tickers = [data.ticker];
+  const budget = 100000;
+  const targetYieldPercent = 0.01;
+  const expiration = "2025-06-30";
+  const tickers = ["ASTS"];
 
   console.log("Processed data:", data);
 
@@ -123,17 +123,29 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
     console.log("AI Response:", aiResponse);
 
     return {
-      message:
-        aiResponse ||
-        `No recommendation generated for ${data.ticker} with ${(
-          targetYieldPercent * 100
-        ).toFixed(0)}% target yield`,
+      message: JSON.parse(aiResponse!),
       success: true,
     };
   } catch (error) {
     console.error("Error in generateCrateAction:", error);
     return {
-      message: `Error: ${error}`,
+      message: {
+        found: false,
+        ticker: "",
+        strike: 0.0,
+        expiration: "",
+        contract: "",
+        contracts_to_sell: 0,
+        premium_per_contract: 0.0,
+        total_premium_income: 0.0,
+        cash_required: 0.0,
+        annualized_yield: 0.0,
+        break_even_price: 0.0,
+        setup_plan: "",
+        exit_plan: "",
+        risk_assessment: "",
+        reasoning: "",
+      },
       success: false,
     };
   }

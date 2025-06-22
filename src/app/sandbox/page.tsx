@@ -1,4 +1,5 @@
 "use client";
+import OptionsTradingDialog from "@/components/options-trading-dialog";
 import StockFilter from "@/components/stock-filter";
 import { Button } from "@/components/ui/button";
 import {
@@ -134,27 +135,30 @@ export default function Page() {
         <h1 className="text-4xl md:text-6xl font-bold ">Select your Crate</h1>
         {/* Options Response Dialog */}
         {dialogOpen && (
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto dark">
-              <DialogTitle>ASTS Common Crate</DialogTitle>
-              <DialogDescription>
-                This is a cash-secured put selling strategy where you sell put
-                option contracts to generate immediate premium income.
-              </DialogDescription>
-              <div className="mt-4">
-                <p>{state.message}</p>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <OptionsTradingDialog
+            open={dialogOpen}
+            onOpenChange={setDialogOpen}
+            data={state.message}
+          />
+          // <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          //   <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto dark">
+          //     <DialogTitle>{state.message.ticker} Common Crate</DialogTitle>
+          //     <DialogDescription>
+          //       This is a cash-secured put selling strategy where you sell put
+          //       option contracts to generate immediate premium income.
+          //     </DialogDescription>
+          //     <div className="mt-4">
+          //       <p>{state.message.setup_plan}</p>
+          //       <p>{state.message.exit_plan["PROFIT SCENARIO"]}</p>
+          //       <p>{state.message.exit_plan["ASSIGNMENT SCENARIO"]}</p>
+          //       <p>{state.message.exit_plan["EARLY EXIT"]}</p>
+          //       <p>{state.message.exit_plan["STOP LOSS"]}</p>
+          //       <p></p>
+          //     </div>
+          //   </DialogContent>
+          //</Dialog>
         )}
 
-        <Button
-          onClick={() => {
-            generateRareCrateAction();
-          }}
-        >
-          Rare
-        </Button>
         <Tabs defaultValue="common" className="w-full max-w-2xl ">
           <div className="flex gap-2">
             <Popover open={open} onOpenChange={setOpen}>
