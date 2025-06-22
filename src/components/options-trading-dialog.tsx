@@ -73,7 +73,7 @@ export default function OptionsTradingDialog({
 }: OptionsTradingDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-black border-gray-800 text-white">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto bg-black border-gray-800 text-white">
         <div className="pb-4">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -99,28 +99,28 @@ export default function OptionsTradingDialog({
           <TabsList className="grid w-full grid-cols-4 bg-gray-900 border-gray-800">
             <TabsTrigger
               value="overview"
-              className="data-[state=active]:bg-black data-[state=active]:text-white"
+              className="data-[state=active]:bg-black text-white"
             >
               <BarChart3 className="h-4 w-4 mr-2" />
               Overview
             </TabsTrigger>
             <TabsTrigger
               value="exit-strategy"
-              className="data-[state=active]:bg-black data-[state=active]:text-white"
+              className="data-[state=active]:bg-black text-white"
             >
               <Target className="h-4 w-4 mr-2" />
               Strategy
             </TabsTrigger>
             <TabsTrigger
               value="risk-analysis"
-              className="data-[state=active]:bg-black data-[state=active]:text-white"
+              className="data-[state=active]:bg-black text-white"
             >
               <AlertTriangle className="h-4 w-4 mr-2" />
               Analysis
             </TabsTrigger>
             <TabsTrigger
               value="contract-details"
-              className="data-[state=active]:bg-black data-[state=active]:text-white"
+              className="data-[state=active]:bg-black text-white"
             >
               <FileText className="h-4 w-4 mr-2" />
               Details
@@ -129,7 +129,7 @@ export default function OptionsTradingDialog({
 
           <TabsContent value="overview" className="space-y-6 mt-6">
             {/* Key Metrics */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <Target className="h-4 w-4 text-blue-400" />
@@ -146,7 +146,7 @@ export default function OptionsTradingDialog({
                   <span className="text-sm text-gray-400">Premium Income</span>
                 </div>
                 <p className="text-xl font-semibold text-green-400">
-                  {formatCurrency(data.total_premium_income)}
+                  ~{formatCurrency(data.total_premium_income)}
                 </p>
               </div>
 
@@ -156,7 +156,7 @@ export default function OptionsTradingDialog({
                   <span className="text-sm text-gray-400">Break Even</span>
                 </div>
                 <p className="text-xl font-semibold">
-                  {formatCurrency(data.break_even_price)}
+                  ~{formatCurrency(data.break_even_price)}
                 </p>
               </div>
 

@@ -69,7 +69,7 @@ export async function findOptions(
       const optionsContracts = await rest.reference.optionsContracts({
         underlying_ticker: ticker,
         contract_type: "put",
-        expiration_date_lte: expiration,
+        "expiration_date.lte": expiration,
         "strike_price.gte": minStrike.toString(),
         "strike_price.lte": maxStrike.toString(),
         order: "desc",

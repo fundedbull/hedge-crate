@@ -4,6 +4,10 @@ import { redirect } from "next/navigation";
 import { findOptions } from "./polygon/api";
 import { CreateCommonCrate, CreateRareCrate } from "./chatgpt/api";
 import { findCoveredCallOptions } from "./polygon/covered-calls";
+import { QUERIES } from "./db/queries";
+import { db } from "./db";
+import { usersTable } from "./db/schema";
+import { eq } from "drizzle-orm";
 
 interface FormEntries {
   ticker: string;
@@ -85,17 +89,46 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
     return redirect("/sign-in");
   }
 
-  console.log(formData);
+  const [user] = await QUERIES.getUserByClerkId(session.userId);
+
+  if (!user || user.credits < 1) {
+    return {
+      message: {
+        found: false,
+        ticker: "",
+        strike: 0.0,
+        expiration: "",
+        contract: "",
+        contracts_to_sell: 0,
+        premium_per_contract: 0.0,
+        total_premium_income: 0.0,
+        cash_required: 0.0,
+        annualized_yield: 0.0,
+        break_even_price: 0.0,
+        setup_plan: "",
+        exit_plan: "",
+        risk_assessment: "",
+        reasoning: "",
+      },
+      success: false,
+    };
+  }
+
+  await db
+    .update(usersTable)
+    .set({ credits: user.credits - 1 })
+    .where(eq(usersTable.clerkId, session.userId));
 
   // Extract and process form data with defaults
   const data = processFormData(formData);
-
-  const budget = 100000;
+  const getDatePlusMonth = () =>
+    new Date(new Date().setMonth(new Date().getMonth() + 1))
+      .toISOString()
+      .split("T")[0];
+  const budget = data.budget;
   const targetYieldPercent = 0.01;
-  const expiration = "2025-06-30";
-  const tickers = ["ASTS"];
-
-  console.log("Processed data:", data);
+  const expiration = getDatePlusMonth();
+  const tickers = [data.ticker];
 
   try {
     // Find suitable options
