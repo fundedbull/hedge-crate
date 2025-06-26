@@ -35,7 +35,7 @@ export function CrateList({ crates }: { crates: CardData[] }) {
             <thead>
               <tr className="border-b text-left text-sm font-medium text-muted-foreground">
                 <th className="pb-3 pl-4">CRATE</th>
-                <th className="pb-3">Type</th>
+                <th className="pb-3">Difficulty</th>
                 <th className="pb-3">Instrument</th>
 
                 <th className="pb-3">DATE</th>
@@ -51,7 +51,7 @@ export function CrateList({ crates }: { crates: CardData[] }) {
                   <td className="py-3 pl-4">
                     <div className="font-medium">{crate.rarity}</div>
                   </td>
-                  <td>{crate.strategy}</td>
+                  <td>{crate.difficulty}</td>
                   <td>{crate.instrument}</td>
 
                   <td>{crate.createdAt.toLocaleDateString()}</td>

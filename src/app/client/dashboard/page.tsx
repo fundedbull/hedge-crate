@@ -20,6 +20,8 @@ import {
   Shield,
   Zap,
 } from "lucide-react";
+import { auth } from "@clerk/nextjs/server";
+import { QUERIES } from "@/server/db/queries";
 
 const strategies = [
   {
@@ -102,10 +104,15 @@ const strategies = [
   },
 ];
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const session = await auth();
+
+  const [user] = await QUERIES.getUserByClerkId(session.userId!);
+  const crates = await QUERIES.getCratesByUserId(user.id);
+
   return (
     <div className="p-6 space-y-6 max-w-screen md:w-full">
-      <CrateList crates={[]} />
+      <CrateList crates={crates} />
       <Card className="dark text-white">
         <CardContent className="p-0">
           <div className="overflow-x-auto">

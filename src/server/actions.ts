@@ -6,7 +6,7 @@ import { CreateCommonCrate, CreateRareCrate } from "./chatgpt/api";
 import { findCoveredCallOptions } from "./polygon/covered-calls";
 import { QUERIES } from "./db/queries";
 import { db } from "./db";
-import { usersTable } from "./db/schema";
+import { cardsTable, creditsTransactionTable, usersTable } from "./db/schema";
 import { eq } from "drizzle-orm";
 
 interface FormEntries {
@@ -155,8 +155,27 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
 
     console.log("AI Response:", aiResponse);
 
+    const message = JSON.parse(aiResponse!);
+
+    await Promise.all([
+      db.insert(creditsTransactionTable).values({
+        userId: user.id,
+        amount: 1,
+        type: "crate_open",
+      }),
+      db.insert(cardsTable).values({
+        userId: user.id,
+        setup: message["setup_plan"],
+        exitPlan: [message["exit_plan"]],
+        difficulty: "easy",
+        instrument: message["ticker"],
+        rarity: "common",
+        strategy: message["reasoning"],
+      }),
+    ]);
+
     return {
-      message: JSON.parse(aiResponse!),
+      message,
       success: true,
     };
   } catch (error) {
