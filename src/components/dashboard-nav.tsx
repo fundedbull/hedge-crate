@@ -74,7 +74,13 @@ export function DashboardNav({ className, isCollapsed, ...props }: NavProps) {
   ];
 
   return (
-    <nav className={cn("flex flex-col gap-2", className)} {...props}>
+    <nav
+      className={cn(
+        "grid grid-cols-4 md:flex flex-wrap md:flex-col gap-2",
+        className
+      )}
+      {...props}
+    >
       {items.map((item, index) => (
         <Button
           key={index}

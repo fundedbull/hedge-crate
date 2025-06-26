@@ -17,8 +17,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-black px-6">
+    <div className="flex min-h-screen md:w-full md:flex-col">
+      <header className="hidden md:sticky top-0 z-10 md:flex h-16 items-center gap-4 border-b bg-black px-6">
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="md:hidden">
@@ -37,14 +37,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <UserNav />
         </div>
       </header>
-      <div className="flex flex-1">
+      <div className="flex flex-col md:flex-row">
         <aside
-          className={`hidden border-r bg-background md:block ${
-            isCollapsed ? "w-16" : "w-64"
+          className={`md:border-r bg-background w-full md:block ${
+            isCollapsed ? "md:w-16" : "md:w-64"
           } transition-all duration-300 ease-in-out`}
         >
           <div className="flex h-full flex-col">
-            <div className="flex h-14 items-center justify-end border-b px-3 bg-black">
+            <div className="hidden md:flex h-14 items-center justify-end border-b px-3 bg-black">
               <Button
                 variant="ghost"
                 size="icon"
@@ -58,7 +58,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 <span className="sr-only">Toggle Sidebar</span>
               </Button>
             </div>
-            <div className="flex-1 overflow-auto py-4 px-3 bg-black">
+            <div className="flex-1 md:overflow-auto py-4 px-3 bg-black">
               <DashboardNav isCollapsed={isCollapsed} />
             </div>
           </div>

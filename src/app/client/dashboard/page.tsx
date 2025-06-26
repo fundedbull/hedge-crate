@@ -104,7 +104,7 @@ const strategies = [
 
 export default function DashboardPage() {
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 max-w-screen md:w-full">
       <CrateList crates={[]} />
       <Card className="dark text-white">
         <CardContent className="p-0">

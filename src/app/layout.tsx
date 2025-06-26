@@ -30,7 +30,7 @@ export default async function RootLayout({
   let credits = 0;
   if (session.userId) {
     const [user] = await QUERIES.getUserByClerkId(session.userId);
-    credits = user.credits;
+    credits = user?.credits ?? 0;
   }
   return (
     <ClerkProvider>
