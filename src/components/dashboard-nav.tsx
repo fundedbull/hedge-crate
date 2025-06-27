@@ -1,102 +1,197 @@
 "use client";
 
-import type React from "react";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { useState } from "react";
 import {
   LayoutDashboard,
   Package,
   FileText,
-  Calendar,
   Settings,
-  BarChart,
   LockIcon,
   BookOpen,
-  Landmark,
   PiggyBank,
-  Coins,
   CircleDollarSign,
+  MoreHorizontal,
 } from "lucide-react";
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-
-interface NavProps extends React.HTMLAttributes<HTMLElement> {
+interface DashboardNavProps {
   isCollapsed: boolean;
+  isMobile?: boolean;
 }
 
-export function DashboardNav({ className, isCollapsed, ...props }: NavProps) {
+const primaryNavItems = [
+  {
+    title: "Dashboard",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "Crates",
+    href: "/dashboard/crates",
+    icon: Package,
+  },
+  {
+    title: "Trades",
+    href: "/client/dashboard/trades",
+    icon: LockIcon,
+  },
+];
+
+const secondaryNavItems = [
+  {
+    title: "News",
+    href: "/client/dashboard/news",
+    icon: FileText,
+  },
+  {
+    title: "Brokers",
+    href: "/client/dashboard/brokers",
+    icon: PiggyBank,
+  },
+  {
+    title: "Guide",
+    href: "/client/dashboard/guide",
+    icon: BookOpen,
+  },
+  {
+    title: "Rewards",
+    href: "/client/dashboard/rewards",
+    icon: CircleDollarSign,
+  },
+  {
+    title: "Settings",
+    href: "/client/dashboard/settings",
+    icon: Settings,
+  },
+];
+
+const allNavItems = [...primaryNavItems, ...secondaryNavItems];
+
+export function DashboardNav({
+  isCollapsed,
+  isMobile = false,
+}: DashboardNavProps) {
   const pathname = usePathname();
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
 
-  const items = [
-    {
-      title: "Dashboard",
-      href: "/dashboard",
-      icon: LayoutDashboard,
-    },
+  if (isMobile) {
+    // Check if current page is in secondary items
+    const isSecondaryActive = secondaryNavItems.some(
+      (item) => pathname === item.href
+    );
 
-    {
-      title: "Crates",
-      href: "/dashboard/crates",
-      icon: Package,
-    },
-    {
-      title: "Trades",
-      href: "client/dashboard",
-      icon: LockIcon,
-    },
-    {
-      title: "News",
-      href: "client/dashboard",
-      icon: LockIcon,
-    },
-    {
-      title: "Brokers",
-      href: "/client/dashboard/brokers",
-      icon: PiggyBank,
-    },
-    {
-      title: "Guide",
-      href: "/client/dashboard/guide",
-      icon: BookOpen,
-    },
-    {
-      title: "Rewards",
-      href: "/client/dashboard/rewards",
-      icon: CircleDollarSign,
-    },
-    {
-      title: "Settings",
-      href: "/client/dashboard/settings",
-      icon: Settings,
-    },
-  ];
+    return (
+      <>
+        {/* Primary Navigation */}
+        <nav className="flex justify-around items-center">
+          {primaryNavItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
 
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors flex-1",
+                  isActive
+                    ? "text-white bg-gray-800"
+                    : "text-gray-400 hover:text-white hover:bg-gray-800"
+                )}
+              >
+                <Icon className="h-5 w-5 mb-1" />
+                <span className="text-xs font-medium">{item.title}</span>
+              </Link>
+            );
+          })}
+
+          {/* More Button */}
+          <Sheet open={isMoreOpen} onOpenChange={setIsMoreOpen}>
+            <SheetTrigger asChild>
+              <button
+                className={cn(
+                  "flex flex-col items-center justify-center py-2 px-3 rounded-lg transition-colors flex-1",
+                  isSecondaryActive
+                    ? "text-white bg-gray-800"
+                    : "text-gray-400 hover:text-white hover:bg-gray-800"
+                )}
+              >
+                <MoreHorizontal className="h-5 w-5 mb-1" />
+                <span className="text-xs font-medium">More</span>
+              </button>
+            </SheetTrigger>
+            <SheetContent
+              side="bottom"
+              className="bg-black border-gray-800 p-6"
+            >
+              <SheetTitle className="text-lg font-semibold text-white ">
+                More Options
+              </SheetTitle>
+              <div className="grid grid-cols-2 gap-3">
+                {secondaryNavItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = pathname === item.href;
+
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsMoreOpen(false)}
+                      className={cn(
+                        "flex items-center gap-3 p-4 rounded-lg transition-colors",
+                        isActive
+                          ? "text-white bg-gray-800"
+                          : "text-gray-400 hover:text-white hover:bg-gray-800"
+                      )}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span className="font-medium">{item.title}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </nav>
+      </>
+    );
+  }
+
+  // Desktop sidebar navigation layout (unchanged)
   return (
-    <nav
-      className={cn(
-        "grid grid-cols-4 md:flex flex-wrap md:flex-col gap-2",
-        className
-      )}
-      {...props}
-    >
-      {items.map((item, index) => (
-        <Button
-          key={index}
-          variant={pathname === item.href ? "secondary" : "ghost"}
-          size="sm"
-          className={cn("justify-start", isCollapsed && "justify-center px-2")}
-          asChild
-        >
-          <Link href={item.href}>
-            <item.icon
-              className={cn("h-4 w-4", isCollapsed ? "mr-0" : "mr-2")}
-            />
-            {!isCollapsed && <span>{item.title}</span>}
-          </Link>
-        </Button>
-      ))}
+    <nav className="space-y-2">
+      {allNavItems.map((item) => {
+        const Icon = item.icon;
+        const isActive = pathname === item.href;
+
+        return (
+          <Button
+            key={item.href}
+            variant={isActive ? "secondary" : "ghost"}
+            size="sm"
+            className={cn(
+              "w-full justify-start text-white hover:bg-gray-800",
+              isCollapsed && "justify-center px-2",
+              isActive && "bg-gray-800"
+            )}
+            asChild
+          >
+            <Link href={item.href}>
+              <Icon className={cn("h-4 w-4", !isCollapsed && "mr-2")} />
+              {!isCollapsed && <span>{item.title}</span>}
+            </Link>
+          </Button>
+        );
+      })}
     </nav>
   );
 }
