@@ -31,12 +31,12 @@ interface DashboardNavProps {
 const primaryNavItems = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/client/dashboard",
     icon: LayoutDashboard,
   },
   {
     title: "Crates",
-    href: "/dashboard/crates",
+    href: "/client/dashboard/crates",
     icon: Package,
   },
   {
