@@ -84,14 +84,19 @@ export async function signInRedirect() {
 }
 
 export async function generateCrateAction(prevState: any, formData: FormData) {
+  console.log("generateCrateAction called");
   const session = await auth();
   if (!session.userId) {
+    console.log("User not signed in, redirecting to /sign-in");
     return redirect("/sign-in");
   }
+  console.log("User session found:", session.userId);
 
   const [user] = await QUERIES.getUserByClerkId(session.userId);
+  console.log("User retrieved from DB:", user);
 
   if (!user || user.credits < 1) {
+    console.log("User has insufficient credits or does not exist.");
     return {
       message: {
         found: false,
@@ -113,14 +118,18 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
       success: false,
     };
   }
+  console.log(`User has ${user.credits} credits. Deducting 1.`);
 
   await db
     .update(usersTable)
     .set({ credits: user.credits - 1 })
     .where(eq(usersTable.clerkId, session.userId));
+  console.log("Credits deducted successfully.");
 
   // Extract and process form data with defaults
   const data = processFormData(formData);
+  console.log("Form data processed:", data);
+
   const getDatePlusMonth = () =>
     new Date(new Date().setMonth(new Date().getMonth() + 1))
       .toISOString()
@@ -129,6 +138,7 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
   const targetYieldPercent = 0.01;
   const expiration = getDatePlusMonth();
   const tickers = [data.ticker];
+  console.log("Parameters for findOptions:", { tickers, targetYieldPercent, expiration, budget });
 
   try {
     // Find suitable options
@@ -138,8 +148,10 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
       expiration,
       budget
     );
+    console.log("Options found:", options);
 
     if (options.length === 0) {
+      console.log("No suitable options found.");
       return {
         message: "No suitable options found for the given criteria.",
         success: false,
@@ -147,15 +159,17 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
     }
 
     // Get AI recommendation
+    console.log("Getting AI recommendation...");
     const aiResponse = await CreateCommonCrate(
       budget,
       targetYieldPercent,
       options
     );
 
-    console.log("AI Response:", aiResponse);
+    console.log("AI Response (raw):", aiResponse);
 
     const message = JSON.parse(aiResponse!);
+    console.log("Parsed AI Response:", message);
 
     await Promise.all([
       db.insert(creditsTransactionTable).values({
@@ -173,7 +187,9 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
         strategy: message["reasoning"],
       }),
     ]);
+    console.log("Database updated with new transaction and card.");
 
+    console.log("Action completed successfully.");
     return {
       message,
       success: true,
@@ -204,14 +220,28 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
 }
 
 export async function generateRareCrateAction() {
-  const options = await findCoveredCallOptions(
-    ["ASTS"],
-    { ["ASTS"]: 100 },
-    0.05,
-    "2025-06-28"
-  );
-  console.log(options);
+  console.log("generateRareCrateAction called");
 
-  const res = await CreateRareCrate(10000, 0.05, options);
-  console.log(res);
+  const tickers = ["ASTS"];
+  const portfolio = { ["ASTS"]: 100 };
+  const targetYield = 0.05;
+  const expiration = "2025-06-28";
+
+  console.log("Parameters for findCoveredCallOptions:", { tickers, portfolio, targetYield, expiration });
+
+  const options = await findCoveredCallOptions(
+    tickers,
+    portfolio,
+    targetYield,
+    expiration
+  );
+  console.log("Covered call options found:", options);
+
+  const budget = 10000;
+  console.log(`Calling CreateRareCrate with budget: ${budget}, targetYield: ${targetYield}`);
+
+  const res = await CreateRareCrate(budget, targetYield, options);
+  console.log("CreateRareCrate response:", res);
+
+  console.log("generateRareCrateAction finished");
 }
