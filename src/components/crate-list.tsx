@@ -30,14 +30,59 @@ export function CrateList({ crates }: { crates: CardData[] }) {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto">
+        {/* Mobile View */}
+        <div className="md:hidden">
+          {crates.map((crate) => (
+            <div
+              key={crate.id}
+              className="mb-4 rounded-lg border p-4 text-sm dark:border-gray-700"
+            >
+              <div className="flex items-center justify-between">
+                <div className="font-medium">{crate.rarity}</div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <MoreHorizontal className="h-4 w-4" />
+                      <span className="sr-only">Actions</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>View Details</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <div className="mt-4 grid grid-cols-3 gap-x-4">
+                <div>
+                  <div className="text-xs text-muted-foreground">
+                    Difficulty
+                  </div>
+                  <div>{crate.difficulty}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-muted-foreground">
+                    Instrument
+                  </div>
+                  <div>{crate.instrument}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-muted-foreground">Date</div>
+                  <div>{crate.createdAt.toLocaleDateString()}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop View */}
+        <div className="hidden overflow-x-auto md:block">
           <table className="w-full">
             <thead>
               <tr className="border-b text-left text-sm font-medium text-muted-foreground">
                 <th className="pb-3 pl-4">CRATE</th>
                 <th className="pb-3">Difficulty</th>
                 <th className="pb-3">Instrument</th>
-
                 <th className="pb-3">DATE</th>
                 <th className="pb-3 pr-4 text-right">Actions</th>
               </tr>
@@ -53,7 +98,6 @@ export function CrateList({ crates }: { crates: CardData[] }) {
                   </td>
                   <td>{crate.difficulty}</td>
                   <td>{crate.instrument}</td>
-
                   <td>{crate.createdAt.toLocaleDateString()}</td>
                   <td className="text-right pr-4">
                     <DropdownMenu>

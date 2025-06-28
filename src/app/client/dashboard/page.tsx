@@ -114,115 +114,213 @@ export default async function DashboardPage() {
     <div className="p-6 space-y-6 max-w-screen md:w-full">
       <CrateList crates={crates} />
       <Card className="dark text-white">
+        <CardTitle className="px-2">Crate Types</CardTitle>
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-neutral-800">
-                  <th className="py-4 px-4 text-left">Crate Tier</th>
-                  <th className="py-4 px-4 text-left">Strategy Name</th>
-                  <th className="py-4 px-4 text-left">Type</th>
-                  <th className="py-4 px-4 text-left">Risk</th>
-                  <th className="py-4 px-4 text-left">Reward</th>
-                  <th className="py-4 px-4 text-left">Effort</th>
-                  <th className="py-4 px-4 text-left">Frequency</th>
-                  <th className="py-4 px-4 text-left">Execution Complexity</th>
-                </tr>
-              </thead>
-              <tbody>
-                {strategies.map((strategy, index) => (
-                  <tr key={index} className="border-b border-neutral-800">
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-2">
-                        <div
-                          className={`w-4 h-4 rounded ${strategy.tierColor}`}
-                        ></div>
-                        <span>{strategy.tier}</span>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 font-medium">{strategy.name}</td>
-                    <td className="py-4 px-4">{strategy.type}</td>
-                    <td className="py-4 px-4">
+          <div className="grid grid-cols-1 gap-4 md:hidden">
+            {strategies.map((strategy, index) => (
+              <Card key={index} className="dark text-white">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`w-4 h-4 rounded ${strategy.tierColor}`}
+                      ></div>
+                      <span className="font-medium">{strategy.name}</span>
+                    </div>
+                    <span className="text-sm">{strategy.type}</span>
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <div className="text-muted-foreground">Risk</div>
                       <div className="flex items-center gap-2">
                         {strategy.risk.icon}
                         <span>{strategy.risk.level}</span>
                       </div>
-                    </td>
-                    <td className="py-4 px-4">
+                    </div>
+                    <div>
+                      <div className="text-muted-foreground">Reward</div>
                       <div className="flex items-center gap-2">
                         {strategy.reward.icon}
                         <span>{strategy.reward.level}</span>
                       </div>
-                    </td>
-                    <td className="py-4 px-4">
+                    </div>
+                    <div>
+                      <div className="text-muted-foreground">Effort</div>
                       <div className="flex items-center gap-2">
                         {strategy.effort.icon}
                         <span>{strategy.effort.level}</span>
                       </div>
-                    </td>
-                    <td className="py-4 px-4">
+                    </div>
+                    <div>
+                      <div className="text-muted-foreground">Frequency</div>
                       <div className="flex items-center gap-2">
                         {strategy.frequency.icon}
                         <span>{strategy.frequency.level}</span>
                       </div>
-                    </td>
-                    <td className="py-4 px-4">
+                    </div>
+                    <div className="col-span-2">
+                      <div className="text-muted-foreground">
+                        Execution Complexity
+                      </div>
                       <div className="flex items-center gap-2">
                         {strategy.complexity.icon}
                         <span>{strategy.complexity.level}</span>
                       </div>
-                    </td>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <div className="hidden md:block">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-neutral-800">
+                    <th className="py-4 px-4 text-left">Crate Tier</th>
+                    <th className="py-4 px-4 text-left">Strategy Name</th>
+                    <th className="py-4 px-4 text-left">Type</th>
+                    <th className="py-4 px-4 text-left">Risk</th>
+                    <th className="py-4 px-4 text-left">Reward</th>
+                    <th className="py-4 px-4 text-left">Effort</th>
+                    <th className="py-4 px-4 text-left">Frequency</th>
+                    <th className="py-4 px-4 text-left">
+                      Execution Complexity
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {strategies.map((strategy, index) => (
+                    <tr key={index} className="border-b border-neutral-800">
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-2">
+                          <div
+                            className={`w-4 h-4 rounded ${strategy.tierColor}`}
+                          ></div>
+                          <span>{strategy.tier}</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4 font-medium">{strategy.name}</td>
+                      <td className="py-4 px-4">{strategy.type}</td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-2">
+                          {strategy.risk.icon}
+                          <span>{strategy.risk.level}</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-2">
+                          {strategy.reward.icon}
+                          <span>{strategy.reward.level}</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-2">
+                          {strategy.effort.icon}
+                          <span>{strategy.effort.level}</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-2">
+                          {strategy.frequency.icon}
+                          <span>{strategy.frequency.level}</span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-2">
+                          {strategy.complexity.icon}
+                          <span>{strategy.complexity.level}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </CardContent>
       </Card>
       <Card className="bg-zinc-900 text-white border-zinc-800">
         <CardContent className="p-0">
-          <div className="w-full">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-zinc-800">
-                  <th className="text-left p-4 font-medium text-sm">
-                    Confidence Level
-                  </th>
-                  <th className="text-left p-4 font-medium text-sm">
-                    Criteria
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b border-zinc-800">
-                  <td className="p-4 flex items-center gap-2">
-                    <LockIcon className="h-5 w-5 text-yellow-500" />
-                    <span className="font-medium">High</span>
-                  </td>
-                  <td className="p-4">
-                    Tight spreads, strong volume, minimal slippage risk
-                  </td>
-                </tr>
-                <tr className="border-b border-zinc-800">
-                  <td className="p-4 flex items-center gap-2">
-                    <ScaleIcon className="h-5 w-5 text-orange-400" />
-                    <span className="font-medium">Medium</span>
-                  </td>
-                  <td className="p-4">
-                    Slight inefficiency, but may depend on market timing
-                  </td>
-                </tr>
-                <tr>
-                  <td className="p-4 flex items-center gap-2">
-                    <AlertTriangleIcon className="h-5 w-5 text-yellow-500" />
-                    <span className="font-medium">Low</span>
-                  </td>
-                  <td className="p-4">
-                    Theoretical only — spreads too wide or data delayed
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="grid grid-cols-1 gap-4 md:hidden">
+            <Card className="dark text-white">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2">
+                  <LockIcon className="h-5 w-5 text-yellow-500" />
+                  <span className="font-medium">High Confidence</span>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Tight spreads, strong volume, minimal slippage risk
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="dark text-white">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2">
+                  <ScaleIcon className="h-5 w-5 text-orange-400" />
+                  <span className="font-medium">Medium Confidence</span>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Slight inefficiency, but may depend on market timing
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="dark text-white">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2">
+                  <AlertTriangleIcon className="h-5 w-5 text-yellow-500" />
+                  <span className="font-medium">Low Confidence</span>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Theoretical only — spreads too wide or data delayed
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="hidden md:block">
+            <div className="w-full">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-zinc-800">
+                    <th className="text-left p-4 font-medium text-sm">
+                      Confidence Level
+                    </th>
+                    <th className="text-left p-4 font-medium text-sm">
+                      Criteria
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-zinc-800">
+                    <td className="p-4 flex items-center gap-2">
+                      <LockIcon className="h-5 w-5 text-yellow-500" />
+                      <span className="font-medium">High</span>
+                    </td>
+                    <td className="p-4">
+                      Tight spreads, strong volume, minimal slippage risk
+                    </td>
+                  </tr>
+                  <tr className="border-b border-zinc-800">
+                    <td className="p-4 flex items-center gap-2">
+                      <ScaleIcon className="h-5 w-5 text-orange-400" />
+                      <span className="font-medium">Medium</span>
+                    </td>
+                    <td className="p-4">
+                      Slight inefficiency, but may depend on market timing
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="p-4 flex items-center gap-2">
+                      <AlertTriangleIcon className="h-5 w-5 text-yellow-500" />
+                      <span className="font-medium">Low</span>
+                    </td>
+                    <td className="p-4">
+                      Theoretical only — spreads too wide or data delayed
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </CardContent>
       </Card>

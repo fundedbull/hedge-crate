@@ -118,6 +118,63 @@ export default function Page() {
 
       <Card className="dark text-white">
         <CardContent className="p-0">
+          <div className="grid grid-cols-1 gap-4 md:hidden">
+          {strategies.map((strategy, index) => (
+            <Card key={index} className="dark text-white">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={`w-4 h-4 rounded ${strategy.tierColor}`}
+                    ></div>
+                    <span className="font-medium">{strategy.name}</span>
+                  </div>
+                  <span className="text-sm">{strategy.type}</span>
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <div className="text-muted-foreground">Risk</div>
+                    <div className="flex items-center gap-2">
+                      {strategy.risk.icon}
+                      <span>{strategy.risk.level}</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-muted-foreground">Reward</div>
+                    <div className="flex items-center gap-2">
+                      {strategy.reward.icon}
+                      <span>{strategy.reward.level}</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-muted-foreground">Effort</div>
+                    <div className="flex items-center gap-2">
+                      {strategy.effort.icon}
+                      <span>{strategy.effort.level}</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-muted-foreground">Frequency</div>
+                    <div className="flex items-center gap-2">
+                      {strategy.frequency.icon}
+                      <span>{strategy.frequency.level}</span>
+                    </div>
+                  </div>
+                  <div className="col-span-2">
+                    <div className="text-muted-foreground">
+                      Execution Complexity
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {strategy.complexity.icon}
+                      <span>{strategy.complexity.level}</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <div className="hidden md:block">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -180,10 +237,47 @@ export default function Page() {
               </tbody>
             </table>
           </div>
+        </div>
         </CardContent>
       </Card>
       <Card className="bg-zinc-900 text-white border-zinc-800">
         <CardContent className="p-0">
+          <div className="grid grid-cols-1 gap-4 md:hidden">
+          <Card className="dark text-white">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2">
+                <LockIcon className="h-5 w-5 text-yellow-500" />
+                <span className="font-medium">High Confidence</span>
+              </div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Tight spreads, strong volume, minimal slippage risk
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="dark text-white">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2">
+                <ScaleIcon className="h-5 w-5 text-orange-400" />
+                <span className="font-medium">Medium Confidence</span>
+              </div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Slight inefficiency, but may depend on market timing
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="dark text-white">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2">
+                <AlertTriangleIcon className="h-5 w-5 text-yellow-500" />
+                <span className="font-medium">Low Confidence</span>
+              </div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Theoretical only — spreads too wide or data delayed
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="hidden md:block">
           <div className="w-full">
             <table className="w-full">
               <thead>
@@ -227,6 +321,7 @@ export default function Page() {
               </tbody>
             </table>
           </div>
+        </div>
         </CardContent>
       </Card>
 

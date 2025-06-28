@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function Page() {
   return (
-    <div className="p-4">
+    <div className="p-4 sm:p-6">
       <Card className="dark">
         <CardContent className="p-6">
           <h2 className="text-xl font-bold mb-3">EARN 1 FREE MONTH OF PROOF</h2>

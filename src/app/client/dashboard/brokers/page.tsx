@@ -21,7 +21,7 @@ import BrokerComparisonCard from "@/components/broker-comparison-card";
 
 export default function HedgeGuidePage() {
   return (
-    <div className=" p-6 ">
+    <div className="p-2 md:p-6">
       <div className="flex flex-col space-y-6">
         <div className="flex flex-col space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">
@@ -34,7 +34,7 @@ export default function HedgeGuidePage() {
         </div>
 
         <Tabs defaultValue="option1" className="w-full dark">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="w-full">
             <TabsTrigger value="option1">Option 1</TabsTrigger>
             <TabsTrigger value="option2">Option 2</TabsTrigger>
             <TabsTrigger value="option3">Option 3</TabsTrigger>
@@ -86,29 +86,31 @@ export default function HedgeGuidePage() {
                 <Separator />
 
                 <div className="space-y-4 p-6">
-                  <div className="grid gap-4 md:grid-cols-3">
-                    <div className="aspect-video w-full bg-gradient-to-br from-blue-500 to-purple-600">
-                      <img
-                        src="/images/webull-dashboard.png"
-                        alt="Tastyrade platform interface"
-                        className="w-full h-full object-fill"
-                      />
-                    </div>
+                  <div className="md:grid md:grid-cols-3 md:gap-4">
+                    <div className="flex space-x-4 overflow-x-auto md:contents">
+                      <div className="flex-shrink-0 w-full md:w-auto aspect-video bg-gradient-to-br from-blue-500 to-purple-600">
+                        <img
+                          src="/images/webull-dashboard.png"
+                          alt="Tastyrade platform interface"
+                          className="w-full h-full object-fill"
+                        />
+                      </div>
 
-                    <div className="aspect-video w-full bg-gradient-to-br from-green-500 to-teal-600">
-                      <img
-                        src="/images/webull-dashboard2.png"
-                        alt="IBKR Trader Workstation interface"
-                        className="w-full h-full object-fill"
-                      />
-                    </div>
+                      <div className="flex-shrink-0 w-full md:w-auto aspect-video bg-gradient-to-br from-green-500 to-teal-600">
+                        <img
+                          src="/images/webull-dashboard2.png"
+                          alt="IBKR Trader Workstation interface"
+                          className="w-full h-full object-fill"
+                        />
+                      </div>
 
-                    <div className="aspect-video w-full bg-gradient-to-br from-orange-500 to-red-600">
-                      <img
-                        src="/images/webull-dashboard3.png"
-                        alt="ThinkorSwim platform interface"
-                        className="w-full h-full object-fill"
-                      />
+                      <div className="flex-shrink-0 w-full md:w-auto aspect-video bg-gradient-to-br from-orange-500 to-red-600">
+                        <img
+                          src="/images/webull-dashboard3.png"
+                          alt="ThinkorSwim platform interface"
+                          className="w-full h-full object-fill"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -164,33 +166,35 @@ export default function HedgeGuidePage() {
 
                 <Separator />
 
-                <div className="space-y-4">
-                  <h3 className="font-medium">Best Options:</h3>
-                  <div className="grid gap-4 md:grid-cols-3">
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-base">Tastyrade</CardTitle>
-                        <CardDescription>
-                          Fast option routing, vertical spreads
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-base">IBKR</CardTitle>
-                        <CardDescription>
-                          Trader Workstation — full pro suite
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-base">ThinkorSwim</CardTitle>
-                        <CardDescription>
-                          TD Ameritrade — hotkeys + scripting
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
+                <Separator />
+
+                <div className="space-y-4 p-6">
+                  <div className="md:grid md:grid-cols-3 md:gap-4">
+                    <div className="flex space-x-4 overflow-x-auto md:contents">
+                      <div className="flex-shrink-0 w-full md:w-auto aspect-video bg-gradient-to-br from-blue-500 to-purple-600">
+                        <img
+                          src="/images/robinhood-dashboard.png"
+                          alt="Tastyrade platform interface"
+                          className="w-full h-full object-fill"
+                        />
+                      </div>
+
+                      <div className="flex-shrink-0 w-full md:w-auto aspect-video bg-gradient-to-br from-green-500 to-teal-600">
+                        <img
+                          src="/images/robinhood-dashboard2.png"
+                          alt="IBKR Trader Workstation interface"
+                          className="w-full h-full object-fill"
+                        />
+                      </div>
+
+                      <div className="flex-shrink-0 w-full md:w-auto aspect-video bg-gradient-to-br from-orange-500 to-red-600">
+                        <img
+                          src="/images/robinhood-dashboard3.png"
+                          alt="ThinkorSwim platform interface"
+                          className="w-full h-full object-fill"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -249,33 +253,33 @@ export default function HedgeGuidePage() {
 
                 <Separator />
 
-                <div className="space-y-4">
-                  <h3 className="font-medium">Best Options:</h3>
-                  <div className="grid gap-4 md:grid-cols-3">
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-base">Tastyrade</CardTitle>
-                        <CardDescription>
-                          Fast option routing, vertical spreads
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-base">IBKR</CardTitle>
-                        <CardDescription>
-                          Trader Workstation — full pro suite
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
-                    <Card>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-base">ThinkorSwim</CardTitle>
-                        <CardDescription>
-                          TD Ameritrade — hotkeys + scripting
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
+                <div className="space-y-4 p-6">
+                  <div className="md:grid md:grid-cols-3 md:gap-4">
+                    <div className="flex space-x-4 overflow-x-auto md:contents">
+                      <div className="flex-shrink-0 w-full md:w-auto aspect-video bg-gradient-to-br from-blue-500 to-purple-600">
+                        <img
+                          src="/images/moomoo-dashboard.png"
+                          alt="Tastyrade platform interface"
+                          className="w-full h-full object-fill"
+                        />
+                      </div>
+
+                      <div className="flex-shrink-0 w-full md:w-auto aspect-video bg-gradient-to-br from-green-500 to-teal-600">
+                        <img
+                          src="/images/moomoo-dashboard2.png"
+                          alt="IBKR Trader Workstation interface"
+                          className="w-full h-full object-fill"
+                        />
+                      </div>
+
+                      <div className="flex-shrink-0 w-full md:w-auto aspect-video bg-gradient-to-br from-orange-500 to-red-600">
+                        <img
+                          src="/images/moomoo-dashboard3.png"
+                          alt="ThinkorSwim platform interface"
+                          className="w-full h-full object-fill"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </CardContent>
