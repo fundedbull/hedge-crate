@@ -138,7 +138,12 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
   const targetYieldPercent = 0.01;
   const expiration = getDatePlusMonth();
   const tickers = [data.ticker];
-  console.log("Parameters for findOptions:", { tickers, targetYieldPercent, expiration, budget });
+  console.log("Parameters for findOptions:", {
+    tickers,
+    targetYieldPercent,
+    expiration,
+    budget,
+  });
 
   try {
     // Find suitable options
@@ -179,12 +184,21 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
       }),
       db.insert(cardsTable).values({
         userId: user.id,
-        setup: message["setup_plan"],
-        exitPlan: [message["exit_plan"]],
-        difficulty: "easy",
-        instrument: message["ticker"],
+        ticker: message["ticker"],
+        strike: message["strike"],
+        expiration: message["expiration"],
+        contract: message["contract"],
+        contractsToSell: message["contracts_to_sell"],
+        premiumPerContract: message["premium_per_contract"],
+        totalPremiumIncome: message["total_premium_income"],
+        cashRequired: message["cash_required"],
+        annualizedYield: message["annualized_yield"],
+        breakEvenPrice: message["break_even_price"],
+        setupPlan: message["setup_plan"],
+        exitPlan: message["exit_plan"],
+        riskAssessment: message["risk_assessment"],
+        reasoning: message["reasoning"],
         rarity: "common",
-        strategy: message["reasoning"],
       }),
     ]);
     console.log("Database updated with new transaction and card.");
@@ -227,7 +241,12 @@ export async function generateRareCrateAction() {
   const targetYield = 0.05;
   const expiration = "2025-06-28";
 
-  console.log("Parameters for findCoveredCallOptions:", { tickers, portfolio, targetYield, expiration });
+  console.log("Parameters for findCoveredCallOptions:", {
+    tickers,
+    portfolio,
+    targetYield,
+    expiration,
+  });
 
   const options = await findCoveredCallOptions(
     tickers,
@@ -238,7 +257,9 @@ export async function generateRareCrateAction() {
   console.log("Covered call options found:", options);
 
   const budget = 10000;
-  console.log(`Calling CreateRareCrate with budget: ${budget}, targetYield: ${targetYield}`);
+  console.log(
+    `Calling CreateRareCrate with budget: ${budget}, targetYield: ${targetYield}`
+  );
 
   const res = await CreateRareCrate(budget, targetYield, options);
   console.log("CreateRareCrate response:", res);

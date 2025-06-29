@@ -1,5 +1,6 @@
 import {
   bigint,
+  decimal,
   index,
   int,
   json,
@@ -41,15 +42,35 @@ export const cardsTable = createTable(
       .primaryKey()
       .autoincrement(),
     userId: bigint("user_id", { mode: "number", unsigned: true }).notNull(),
-    difficulty: singlestoreEnum("difficulty", [
-      "easy",
-      "intermediate",
-      "hard",
-    ]).notNull(),
-    setup: json("setup").$type<string[]>().notNull().default([]),
-    exitPlan: json("exit_plan").$type<string[]>().notNull().default([]),
-    instrument: text("instrument").notNull(),
-    strategy: text("strategy").notNull(),
+    ticker: text("ticker").notNull(),
+    strike: decimal("strike", { precision: 10, scale: 2 }).notNull(),
+    expiration: text("expiration").notNull(), // or date("expiration") if you prefer date type
+    contract: text("contract").notNull(),
+    contractsToSell: int("contracts_to_sell").notNull(),
+    premiumPerContract: decimal("premium_per_contract", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
+    totalPremiumIncome: decimal("total_premium_income", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
+    cashRequired: decimal("cash_required", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
+    annualizedYield: decimal("annualized_yield", {
+      precision: 10,
+      scale: 4,
+    }).notNull(),
+    breakEvenPrice: decimal("break_even_price", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
+    setupPlan: text("setup_plan").notNull(),
+    exitPlan: json("exit_plan").$type<Record<string, string>>().notNull(),
+    riskAssessment: text("risk_assessment").notNull(),
+    reasoning: text("reasoning").notNull(),
     rarity: singlestoreEnum("rarity", ["common", "rare", "epic"]).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
