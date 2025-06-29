@@ -179,9 +179,9 @@ export function DashboardNav({
             variant={isActive ? "secondary" : "ghost"}
             size="sm"
             className={cn(
-              "w-full justify-start text-white hover:bg-gray-800",
+              "w-full justify-start hover:bg-blue-700 hover:text-white",
               isCollapsed && "justify-center px-2",
-              isActive && "bg-gray-800"
+              isActive ? "bg-gray-800 text-white" : "text-gray-400"
             )}
             asChild
           >
