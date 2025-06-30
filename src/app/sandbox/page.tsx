@@ -54,10 +54,12 @@ import {
   XIcon,
 } from "lucide-react";
 import Image from "next/image";
+import ErrorDialog from "@/components/error-dialog";
 import { useActionState, useEffect, useState } from "react";
 
 const initialState = {
-  message: "",
+  data: null,
+  error: null,
   success: false,
 };
 
@@ -103,12 +105,41 @@ export default function Page() {
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   // In your useEffect or wherever you detect success:
   useEffect(() => {
-    if (state.success && state.message) {
+    if (state.success && state.data) {
       setDialogOpen(true);
+    } else if (!state.success && state.error) {
+      setErrorMessage(state.error);
+      setErrorDialogOpen(true);
     }
-  }, [state.success, state.message]);
+  }, [state.success, state.data, state.error]);
+
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | undefined = undefined;
+
+    if (pending) {
+      setProgress(1);
+      interval = setInterval(() => {
+        setProgress((prev) => Math.min(prev + 10, 99));
+      }, 500);
+    } else if (state.success) {
+      setProgress(100);
+    } else {
+      setProgress(0);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [pending, state.success]);
 
   const calculateRRR = () => {
     if (!riskAmount || !rewardAmount || Number(riskAmount) <= 0) return 0;
@@ -133,12 +164,18 @@ export default function Page() {
         className="flex flex-col md:justify-center md:items-center gap-4"
       >
         <h1 className="text-4xl md:text-6xl font-bold ">Select your Crate</h1>
+        {/* Error Dialog */}
+        <ErrorDialog
+          open={errorDialogOpen}
+          onOpenChange={setErrorDialogOpen}
+          message={errorMessage}
+        />
         {/* Options Response Dialog */}
         {dialogOpen && (
           <OptionsTradingDialog
             open={dialogOpen}
             onOpenChange={setDialogOpen}
-            data={state.message}
+            data={state.data}
           />
           // <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           //   <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto dark">
@@ -360,8 +397,14 @@ export default function Page() {
                 <input type="hidden" name="budget" value={budget} />
                 <input type="hidden" name="riskAmount" value={riskAmount} />
                 <input type="hidden" name="rewardAmount" value={rewardAmount} />
-                <Button className="w-full">
-                  Generate <PackageOpenIcon /> 1
+                <Button className="w-full" disabled={pending}>
+                  {pending ? (
+                    `Generating... ${progress}%`
+                  ) : (
+                    <>
+                      Generate <PackageOpenIcon className="ml-2" /> 1
+                    </>
+                  )}
                 </Button>
               </form>
             </article>

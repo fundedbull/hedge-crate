@@ -98,33 +98,12 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
   if (!user || user.credits < 1) {
     console.log("User has insufficient credits or does not exist.");
     return {
-      message: {
-        found: false,
-        ticker: "",
-        strike: 0.0,
-        expiration: "",
-        contract: "",
-        contracts_to_sell: 0,
-        premium_per_contract: 0.0,
-        total_premium_income: 0.0,
-        cash_required: 0.0,
-        annualized_yield: 0.0,
-        break_even_price: 0.0,
-        setup_plan: "",
-        exit_plan: "",
-        risk_assessment: "",
-        reasoning: "",
-      },
+      data: null,
+      error: "You have insufficient credits to open a crate.",
       success: false,
     };
   }
-  console.log(`User has ${user.credits} credits. Deducting 1.`);
-
-  await db
-    .update(usersTable)
-    .set({ credits: user.credits - 1 })
-    .where(eq(usersTable.clerkId, session.userId));
-  console.log("Credits deducted successfully.");
+  console.log(`User has ${user.credits} credits.`);
 
   // Extract and process form data with defaults
   const data = processFormData(formData);
@@ -158,7 +137,9 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
     if (options.length === 0) {
       console.log("No suitable options found.");
       return {
-        message: "No suitable options found for the given criteria.",
+        data: null,
+        error:
+          "No suitable options found for the given criteria. Try adjusting your budget or ticker.",
         success: false,
       };
     }
@@ -173,8 +154,24 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
 
     console.log("AI Response (raw):", aiResponse);
 
-    const message = JSON.parse(aiResponse!);
+    if (!aiResponse) {
+      console.error("AI response was null or undefined.");
+      return {
+        data: null,
+        error: "Failed to get a response from the AI. Please try again later.",
+        success: false,
+      };
+    }
+
+    const message = JSON.parse(aiResponse);
     console.log("Parsed AI Response:", message);
+
+    // Deduct credits only after a successful AI response
+    await db
+      .update(usersTable)
+      .set({ credits: user.credits - 1 })
+      .where(eq(usersTable.clerkId, session.userId));
+    console.log("Credits deducted successfully.");
 
     await Promise.all([
       db.insert(creditsTransactionTable).values({
@@ -205,29 +202,16 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
 
     console.log("Action completed successfully.");
     return {
-      message,
+      data: message,
+      error: null,
       success: true,
     };
   } catch (error) {
     console.error("Error in generateCrateAction:", error);
     return {
-      message: {
-        found: false,
-        ticker: "",
-        strike: 0.0,
-        expiration: "",
-        contract: "",
-        contracts_to_sell: 0,
-        premium_per_contract: 0.0,
-        total_premium_income: 0.0,
-        cash_required: 0.0,
-        annualized_yield: 0.0,
-        break_even_price: 0.0,
-        setup_plan: "",
-        exit_plan: "",
-        risk_assessment: "",
-        reasoning: "",
-      },
+      data: null,
+      error:
+        "An unexpected error occurred while generating your crate. Please try again.",
       success: false,
     };
   }

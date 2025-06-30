@@ -15,7 +15,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen w-full">
       <div className="flex flex-1">
         {/* Desktop Sidebar - only visible on desktop */}
         <aside
@@ -46,7 +46,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-auto bg-black pb-20">{children}</main>
+        <main className="flex flex-col flex-1 overflow-auto bg-black pb-20">
+          {children}
+        </main>
 
         {/* Mobile Bottom Navigation - only visible on mobile */}
         <aside className="fixed bottom-0 left-0 right-0 z-20 border-t bg-black md:hidden">

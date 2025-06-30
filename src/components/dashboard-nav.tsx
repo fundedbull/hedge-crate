@@ -21,6 +21,7 @@ import {
   PiggyBank,
   CircleDollarSign,
   MoreHorizontal,
+  CalendarIcon,
 } from "lucide-react";
 
 interface DashboardNavProps {
@@ -35,14 +36,14 @@ const primaryNavItems = [
     icon: LayoutDashboard,
   },
   {
-    title: "Crates",
+    title: "Locker",
     href: "/client/dashboard/crates",
     icon: Package,
   },
   {
-    title: "Trades",
+    title: "Calendar",
     href: "/client/dashboard/trades",
-    icon: LockIcon,
+    icon: CalendarIcon,
   },
 ];
 
