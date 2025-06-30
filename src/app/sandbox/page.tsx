@@ -76,6 +76,7 @@ export default function Page() {
   const [open, setOpen] = useState(false);
 
   const tickers = [
+    "ASTS",
     "AMC",
     "INTC",
     "GME",
@@ -406,6 +407,14 @@ export default function Page() {
                     </>
                   )}
                 </Button>
+                {pending && (
+                  <div className="w-full bg-gray-700 rounded-full h-2.5 mt-2 dark:bg-gray-700">
+                    <div
+                      className="bg-green-500 h-2.5 rounded-full"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                )}
               </form>
             </article>
           </TabsContent>
