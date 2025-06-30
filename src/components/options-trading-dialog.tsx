@@ -73,7 +73,7 @@ export default function OptionsTradingDialog({
 }: OptionsTradingDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto bg-black border-gray-800 text-white">
+      <DialogContent className="max-w-6xl md:min-w-3xl max-h-[90vh] overflow-y-auto bg-black border-gray-800 text-white">
         <div className="pb-4">
           <div className="flex items-center justify-between mb-4">
             <div>

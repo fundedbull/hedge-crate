@@ -22,6 +22,8 @@ import {
 } from "lucide-react";
 import { auth } from "@clerk/nextjs/server";
 import { QUERIES } from "@/server/db/queries";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const strategies = [
   {
@@ -111,10 +113,20 @@ export default async function DashboardPage() {
   const crates = await QUERIES.getCratesByUserId(user.id);
 
   return (
-    <div className="p-6 space-y-6 max-w-screen md:w-full">
+    <div className="p-2 space-y-6 max-w-screen md:w-full">
+      <div className="bg-blue-500 text-white p-3 rounded-lg text-center mb-6">
+        <p className="font-bold text-sm inline">
+          Alpha is Live! Ends August 30th.
+        </p>
+      </div>
       <CrateList crates={crates} />
       <Card className="dark text-white">
-        <CardTitle className="px-2">Crate Types</CardTitle>
+        <CardTitle className="px-5 flex justify-between">
+          <p>Crate Types</p>
+          <Button asChild>
+            <Link href={"/client/dashboard/charts"}>View More</Link>
+          </Button>
+        </CardTitle>
         <CardContent className="p-0">
           <div className="grid grid-cols-1 gap-4 md:hidden">
             {strategies.map((strategy, index) => (
@@ -238,213 +250,6 @@ export default async function DashboardPage() {
               </table>
             </div>
           </div>
-        </CardContent>
-      </Card>
-      <Card className="bg-zinc-900 text-white border-zinc-800">
-        <CardContent className="p-0">
-          <div className="grid grid-cols-1 gap-4 md:hidden">
-            <Card className="dark text-white">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2">
-                  <LockIcon className="h-5 w-5 text-yellow-500" />
-                  <span className="font-medium">High Confidence</span>
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Tight spreads, strong volume, minimal slippage risk
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="dark text-white">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2">
-                  <ScaleIcon className="h-5 w-5 text-orange-400" />
-                  <span className="font-medium">Medium Confidence</span>
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Slight inefficiency, but may depend on market timing
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="dark text-white">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2">
-                  <AlertTriangleIcon className="h-5 w-5 text-yellow-500" />
-                  <span className="font-medium">Low Confidence</span>
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Theoretical only — spreads too wide or data delayed
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-          <div className="hidden md:block">
-            <div className="w-full">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-zinc-800">
-                    <th className="text-left p-4 font-medium text-sm">
-                      Confidence Level
-                    </th>
-                    <th className="text-left p-4 font-medium text-sm">
-                      Criteria
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-zinc-800">
-                    <td className="p-4 flex items-center gap-2">
-                      <LockIcon className="h-5 w-5 text-yellow-500" />
-                      <span className="font-medium">High</span>
-                    </td>
-                    <td className="p-4">
-                      Tight spreads, strong volume, minimal slippage risk
-                    </td>
-                  </tr>
-                  <tr className="border-b border-zinc-800">
-                    <td className="p-4 flex items-center gap-2">
-                      <ScaleIcon className="h-5 w-5 text-orange-400" />
-                      <span className="font-medium">Medium</span>
-                    </td>
-                    <td className="p-4">
-                      Slight inefficiency, but may depend on market timing
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 flex items-center gap-2">
-                      <AlertTriangleIcon className="h-5 w-5 text-yellow-500" />
-                      <span className="font-medium">Low</span>
-                    </td>
-                    <td className="p-4">
-                      Theoretical only — spreads too wide or data delayed
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="dark">
-        <CardHeader>
-          <h1 className=" text-2xl font-bold">Trading Confidence Levels</h1>
-        </CardHeader>
-
-        <CardContent className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {/* HIGH Confidence Card */}
-          <Card>
-            <CardHeader className="">
-              <CardTitle>HIGH Confidence</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <LockIcon className="h-4 w-4 text-green-500" />
-                    <span>This is a highly tradable arbitrage</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Tight bid/ask spreads</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Decent to high volume</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Low slippage risk</span>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="mb-2 font-semibold">Criteria:</h3>
-                  <ul className="ml-5 list-disc space-y-1 text-sm">
-                    <li>Bid-Ask Spread ≤ 5% of Mark Price</li>
-                    <li>Volume ≥ 100</li>
-                    <li>Delta is cleanly in range (0.3-0.7)</li>
-                    <li>IV is stable (not spiking intraday)</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* MEDIUM Confidence Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                MEDIUM Confidence
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <Scale className="h-4 w-4 text-yellow-500" />
-                    <span>Tradable with caution</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <span className="h-4 w-4 border-b border-yellow-500" />
-                    <span>Slight inefficiencies</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <span className="h-4 w-4 border-b border-yellow-500" />
-                    <span>May require order tweaking or limit entry</span>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="mb-2 font-semibold">Criteria:</h3>
-                  <ul className="ml-5 list-disc space-y-1 text-sm">
-                    <li>Bid-Ask Spread between 5–10%</li>
-                    <li>Volume between 50–100</li>
-                    <li>Less consistent fills or wider spreads</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* LOW Confidence Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                LOW Confidence
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-4">
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <AlertTriangle className="h-4 w-4 text-red-500" />
-                    <span>This is theoretical only</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <AlertCircle className="h-4 w-4 text-red-500" />
-                    <span>Wide spreads</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <AlertCircle className="h-4 w-4 text-red-500" />
-                    <span>Low or zero volume</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <AlertCircle className="h-4 w-4 text-red-500" />
-                    <span>Hard to execute profitably</span>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="mb-2 font-semibold">Criteria:</h3>
-                  <ul className="ml-5 list-disc space-y-1 text-sm">
-                    <li>Bid-Ask Spread {">"} 10% of Mark Price</li>
-                    <li>Volume {"<"} 50</li>
-                    <li>Near-zero open interest or stale data</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </CardContent>
       </Card>
     </div>

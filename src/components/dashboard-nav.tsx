@@ -22,6 +22,8 @@ import {
   CircleDollarSign,
   MoreHorizontal,
   CalendarIcon,
+  ChartAreaIcon,
+  InfoIcon,
 } from "lucide-react";
 
 interface DashboardNavProps {
@@ -67,6 +69,11 @@ const secondaryNavItems = [
     title: "Rewards",
     href: "/client/dashboard/rewards",
     icon: CircleDollarSign,
+  },
+  {
+    title: "Info",
+    href: "/client/dashboard/charts",
+    icon: InfoIcon,
   },
   {
     title: "Settings",

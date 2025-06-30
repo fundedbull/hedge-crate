@@ -52,7 +52,40 @@ const guideContent = [
   },
   {
     title: "Pro Tips When Using Hedge Crates",
-    paragraphs: ["Check back soon for pro tips to enhance your trading strategies!"],
+    sections: [
+      {
+        subtitle: "Have Your Broker Open and Ready",
+        content: "Ensure your broker platform is open and ready to place trades before you open a crate. This allows for quick execution of the recommended strategies.",
+      },
+      {
+        subtitle: "Track Progress with Calendar Feature",
+        content: "Utilize our Calendar Feature to effectively track the progress and performance of your trades.",
+      },
+      {
+        subtitle: "Stay Informed with News Feature",
+        content: "Keep an eye on relevant news and reports using our integrated News Feature to make informed decisions.",
+      },
+      {
+        subtitle: "Aim for Optimal Strike Price",
+        content: "When selecting options, aim for a strike price that is 5-10% away from the current stock price for better risk-reward profiles.",
+      },
+      {
+        subtitle: "Filter for Longer Expirations",
+        content: "Use the filter options to select expirations that are 30 or more days out. This generally provides more time for the trade to play out and reduces time decay pressure.",
+      },
+      {
+        subtitle: "Spread Risk Across Multiple Tickers",
+        content: "Diversify your portfolio by spreading risk across multiple tickers. This helps mitigate potential losses from a single asset.",
+      },
+      {
+        subtitle: "More Capital, Potentially Better Results",
+        content: "Generally, utilizing more capital can lead to better results in terms of premium collected or potential gains, as it allows for more contracts or higher-priced options.",
+      },
+      {
+        subtitle: "Understand This is Not a Get Rich Quick Scheme",
+        content: "It's crucial to understand that Hedge Crates is a tool for strategic trading and education, not a 'get rich quick' scheme. Consistent learning and disciplined application are key.",
+      },
+    ],
   },
 ];
 
@@ -71,9 +104,14 @@ export default function GuidePage() {
 
       <div className="space-y-6">
         {guideContent.map((section, index) => (
-          <Card key={index} className="dark bg-neutral-900/50 border-neutral-800">
+          <Card
+            key={index}
+            className="dark bg-neutral-900/50 border-neutral-800"
+          >
             <CardHeader>
-              <CardTitle className="text-xl text-neutral-100">{section.title}</CardTitle>
+              <CardTitle className="text-xl text-neutral-100">
+                {section.title}
+              </CardTitle>
             </CardHeader>
             <CardContent className="text-neutral-300 leading-relaxed space-y-4">
               {section.paragraphs?.map((paragraph, pIndex) => (
