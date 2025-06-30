@@ -12,7 +12,6 @@ import { eq } from "drizzle-orm";
 interface FormEntries {
   ticker: string;
   type: string;
-  broker: string;
   budget: string;
   riskAmount: string;
   rewardAmount: string;
@@ -21,7 +20,6 @@ interface FormEntries {
 interface ProcessedData {
   ticker: string;
   type: string;
-  broker: string;
   budget: number;
   riskAmount: number;
   rewardAmount: number;
@@ -47,7 +45,6 @@ const processFormData = (formData: FormData): ProcessedData => {
   const defaults: FormEntries = {
     ticker: "ASTS",
     type: "common",
-    broker: "other",
     budget: "10000",
     riskAmount: "1",
     rewardAmount: "0.05", // This gives 5% target yield
@@ -57,7 +54,6 @@ const processFormData = (formData: FormData): ProcessedData => {
   const processed = {
     ticker: formEntries.ticker || defaults.ticker,
     type: formEntries.type || defaults.type,
-    broker: formEntries.broker || defaults.broker,
     budget: parseFloat(formEntries.budget || defaults.budget),
     riskAmount: parseFloat(formEntries.riskAmount || defaults.riskAmount),
     rewardAmount: parseFloat(formEntries.rewardAmount || defaults.rewardAmount),

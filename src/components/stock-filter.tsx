@@ -160,17 +160,17 @@ export default function StockFilter() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="broker" className="flex">
-                  Select Broker <span className="text-red-500 ml-1">*</span>
+                <Label htmlFor="market_cap" className="flex">
+                  Select Market Cap <span className="text-red-500 ml-1">*</span>
                 </Label>
-                <Select value={broker} onValueChange={setBroker} required>
-                  <SelectTrigger id="broker">
-                    <SelectValue placeholder="Select your broker" />
+                <Select value={marketCap} onValueChange={setMarketCap}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Market Cap" />
                   </SelectTrigger>
                   <SelectContent className="dark">
-                    {brokers.map((b) => (
-                      <SelectItem key={b} value={b}>
-                        {b}
+                    {marketCapOptions.map((cap) => (
+                      <SelectItem key={cap} value={cap}>
+                        {cap}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -315,112 +315,6 @@ export default function StockFilter() {
                     onChange={(e) => setPremiumYieldMin(e.target.value)}
                     step="0.1"
                   />
-                </CollapsibleContent>
-              </Collapsible>
-
-              <Collapsible open={liquidityOpen} onOpenChange={setLiquidityOpen}>
-                <CollapsibleTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-between p-0 h-8"
-                  >
-                    <span className="font-semibold text-sm">
-                      Liquidity & Execution
-                    </span>
-                    {liquidityOpen ? (
-                      <ChevronDown className="h-4 w-4" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4" />
-                    )}
-                  </Button>
-                </CollapsibleTrigger>
-                <CollapsibleContent className="space-y-2 mt-2">
-                  <Input
-                    type="number"
-                    placeholder="Min Open Interest"
-                    value={minOpenInterest}
-                    onChange={(e) => setMinOpenInterest(e.target.value)}
-                  />
-                  <Input
-                    type="number"
-                    placeholder="Min Daily Volume"
-                    value={avgDailyVolume}
-                    onChange={(e) => setAvgDailyVolume(e.target.value)}
-                  />
-                </CollapsibleContent>
-              </Collapsible>
-
-              <Collapsible
-                open={advancedRiskOpen}
-                onOpenChange={setAdvancedRiskOpen}
-              >
-                <CollapsibleTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-between p-0 h-8"
-                  >
-                    <span className="font-semibold text-sm">Advanced Risk</span>
-                    {advancedRiskOpen ? (
-                      <ChevronDown className="h-4 w-4" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4" />
-                    )}
-                  </Button>
-                </CollapsibleTrigger>
-                <CollapsibleContent className="space-y-2 mt-2">
-                  <Input
-                    type="number"
-                    placeholder="Max Risk per Contract"
-                    value={maxRiskAmount}
-                    onChange={(e) => setMaxRiskAmount(e.target.value)}
-                  />
-                  <Select
-                    value={confidenceLevel}
-                    onValueChange={setConfidenceLevel}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Confidence Level" />
-                    </SelectTrigger>
-                    <SelectContent className="dark">
-                      {confidenceLevels.map((level) => (
-                        <SelectItem key={level} value={level}>
-                          {level}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </CollapsibleContent>
-              </Collapsible>
-
-              <Collapsible open={marketOpen} onOpenChange={setMarketOpen}>
-                <CollapsibleTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-between p-0 h-8"
-                  >
-                    <span className="font-semibold text-sm">
-                      Market Filters
-                    </span>
-                    {marketOpen ? (
-                      <ChevronDown className="h-4 w-4" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4" />
-                    )}
-                  </Button>
-                </CollapsibleTrigger>
-                <CollapsibleContent className="space-y-2 mt-2">
-                  <Select value={marketCap} onValueChange={setMarketCap}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Market Cap" />
-                    </SelectTrigger>
-                    <SelectContent className="dark">
-                      {marketCapOptions.map((cap) => (
-                        <SelectItem key={cap} value={cap}>
-                          {cap}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
                 </CollapsibleContent>
               </Collapsible>
             </CardContent>

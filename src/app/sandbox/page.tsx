@@ -69,7 +69,7 @@ export default function Page() {
     initialState
   );
   const [ticker, setTicker] = useState("");
-  const [broker, setBroker] = useState("");
+  
   const [budget, setBudget] = useState("");
   const [riskAmount, setRiskAmount] = useState("");
   const [rewardAmount, setRewardAmount] = useState("");
@@ -94,15 +94,7 @@ export default function Page() {
     "META",
   ];
 
-  const brokers = [
-    "Robinhood",
-    "Charles Schwab",
-    "E*TRADE",
-    "Interactive Brokers",
-    "Webull",
-    "Vanguard",
-    "Other",
-  ];
+  
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -227,24 +219,7 @@ export default function Page() {
                       </Select>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="broker" className="flex">
-                        Select Broker{" "}
-                        <span className="text-red-500 ml-1">*</span>
-                      </Label>
-                      <Select value={broker} onValueChange={setBroker} required>
-                        <SelectTrigger id="broker">
-                          <SelectValue placeholder="Select your broker" />
-                        </SelectTrigger>
-                        <SelectContent className="dark">
-                          {brokers.map((b) => (
-                            <SelectItem key={b} value={b}>
-                              {b}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    
 
                     <div className="space-y-2">
                       <Label htmlFor="budget" className="flex">
@@ -394,7 +369,7 @@ export default function Page() {
               <form action={formAction}>
                 <input type="hidden" name="ticker" value={ticker} />
                 <input type="hidden" name="type" value={"common"} />
-                <input type="hidden" name="broker" value={broker} />
+                
                 <input type="hidden" name="budget" value={budget} />
                 <input type="hidden" name="riskAmount" value={riskAmount} />
                 <input type="hidden" name="rewardAmount" value={rewardAmount} />
