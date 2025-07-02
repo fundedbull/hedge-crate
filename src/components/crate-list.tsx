@@ -19,6 +19,7 @@ import {
 import { Card as CardData } from "@/server/db/schema";
 import { useState } from "react";
 import OptionsTradingDialog from "./options-trading-dialog";
+import Link from "next/link";
 
 const sampleOptionsData = {
   ticker: "SPY",
@@ -48,7 +49,7 @@ const sampleOptionsData = {
     "SPY is in a long-term uptrend. Selling a cash-secured put below the current price provides a buffer of safety and allows us to collect premium. The chosen strike has a low delta, suggesting a high probability of expiring out-of-the-money. This strategy generates consistent income and can be a way to acquire shares at a discount.",
 };
 
-export function CrateList({ crates }: { crates: CardData[] }) {
+export function CrateList({ crates, page }: { crates: CardData[], page: 'dashboard' | 'crates' }) {
   const [selectedCrate, setSelectedCrate] = useState<CardData | null>(null);
 
   return (
@@ -59,7 +60,15 @@ export function CrateList({ crates }: { crates: CardData[] }) {
             <CardTitle>Crates</CardTitle>
             <CardDescription>Manage your trading crates.</CardDescription>
           </div>
-          <Button>Open Crate</Button>
+          {page === 'dashboard' ? (
+            <Button asChild>
+              <Link href="/client/dashboard/crates">View More</Link>
+            </Button>
+          ) : (
+            <Button asChild>
+              <Link href="/">Open Crate</Link>
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent>

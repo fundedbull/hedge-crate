@@ -110,7 +110,7 @@ export default async function DashboardPage() {
   const session = await auth();
 
   const [user] = await QUERIES.getUserByClerkId(session.userId!);
-  const crates = await QUERIES.getCratesByUserId(user.id);
+  const crates = await QUERIES.getRecentCratesByUserId(user.id);
 
   return (
     <div className="p-2 space-y-6 max-w-screen md:w-full">
@@ -119,7 +119,7 @@ export default async function DashboardPage() {
           Alpha is Live! Ends August 30th.
         </p>
       </div>
-      <CrateList crates={crates} />
+      <CrateList crates={crates} page="dashboard" />
       <Card className="dark text-white">
         <CardTitle className="px-5 flex justify-between">
           <p>Crate Types</p>

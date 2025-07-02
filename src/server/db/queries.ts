@@ -1,7 +1,7 @@
 import "server-only";
 import { db } from ".";
 import { cardsTable, creditsTransactionTable, usersTable } from "./schema";
-import { and, eq, sql } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 
 export const QUERIES = {
   getUserByClerkId: function (clerkId: string) {
@@ -9,6 +9,49 @@ export const QUERIES = {
   },
   getCratesByUserId: function (userId: number) {
     return db.select().from(cardsTable).where(eq(cardsTable.userId, userId));
+  },
+  getCratesByUserIdWithPagination: function (
+    userId: number,
+    page: number,
+    pageSize: number
+  ) {
+    return db
+      .select()
+      .from(cardsTable)
+      .where(eq(cardsTable.userId, userId))
+      .orderBy(desc(cardsTable.createdAt))
+      .limit(pageSize)
+      .offset((page - 1) * pageSize);
+  },
+  getTotalCratesByUserId: async function (userId: number) {
+    const result = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(cardsTable)
+      .where(eq(cardsTable.userId, userId));
+    return result[0].count;
+  },
+  getRecentCratesByUserId: function (userId: number) {
+    return db
+      .select()
+      .from(cardsTable)
+      .where(eq(cardsTable.userId, userId))
+      .orderBy(desc(cardsTable.createdAt))
+      .limit(5);
+  },
+  getCratesByUserIdForMonth: function (
+    userId: number,
+    year: number,
+    month: number
+  ) {
+    return db
+      .select()
+      .from(cardsTable)
+      .where(
+        and(
+          eq(cardsTable.userId, userId),
+          sql`YEAR(created_at) = ${year} AND MONTH(created_at) = ${month}`
+        )
+      );
   },
   getTodayCrateOpensCount: async function (userId: number) {
     const result = await db
