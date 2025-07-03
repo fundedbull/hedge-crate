@@ -63,8 +63,8 @@ export default function TradingCalendar({
   onDayClick,
   onMonthChange,
 }: TradingCalendarProps) {
-  const weekDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-  const weekDaysMobile = ["S", "M", "T", "W", "T", "F", "S"];
+  const weekDays = ["MON", "TUE", "WED", "THU", "FRI"];
+  const weekDaysMobile = ["M", "T", "W", "T", "F"];
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
@@ -72,8 +72,27 @@ export default function TradingCalendar({
   ];
 
   // Calculate which day of week the month starts
-  const startDay = getFirstDayOfMonth(month, year);
-  const emptyDays = Array(startDay).fill(null);
+  const firstDayOfMonth = new Date(year, monthNames.indexOf(month), 1);
+  const dayOfWeekForFirstDay = firstDayOfMonth.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
+
+  let emptyDaysCount = 0;
+  if (dayOfWeekForFirstDay === 0) { // If 1st is Sunday
+    emptyDaysCount = 0; // No empty cells before the first Monday in a 5-day grid
+  } else if (dayOfWeekForFirstDay === 6) { // If 1st is Saturday
+    emptyDaysCount = 0; // No empty cells before the first Monday in a 5-day grid
+  } else { // Monday to Friday
+    emptyDaysCount = dayOfWeekForFirstDay - 1; // Mon=0, Tue=1, ..., Fri=4
+  }
+  const emptyDays = Array(emptyDaysCount).fill(null);
+
+  const daysInMonth = new Date(year, monthNames.indexOf(month) + 1, 0).getDate();
+  const allDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+  const filteredDays = allDays.filter(day => {
+    const date = new Date(year, monthNames.indexOf(month), day);
+    const dayOfWeek = date.getDay();
+    return dayOfWeek !== 0 && dayOfWeek !== 6; // Filter out Sunday (0) and Saturday (6)
+  });
 
   const handleDayClick = (day: number) => {
     if (onDayClick) {
@@ -111,7 +130,7 @@ export default function TradingCalendar({
       {/* Calendar Grid */}
       <div className="bg-slate-900/50 rounded-lg p-2 sm:p-4">
         {/* Week Day Headers */}
-        <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2 sm:mb-4">
+        <div className="grid grid-cols-5 gap-1 sm:gap-2 mb-2 sm:mb-4">
           {weekDays.map((day, index) => (
             <div
               key={day}
@@ -124,25 +143,23 @@ export default function TradingCalendar({
         </div>
 
         {/* Calendar Days */}
-        <div className="grid grid-cols-7 gap-1 sm:gap-2">
+        <div className="grid grid-cols-5 gap-1 sm:gap-2">
           {/* Empty days for month start alignment */}
           {emptyDays.map((_, index) => (
             <div key={`empty-${index}`} className="aspect-square" />
           ))}
 
-          {/* Trading days */}
-          {data.map((dayData) => {
-            const date = new Date(year, monthNames.indexOf(month), dayData.day);
-            const dayOfWeek = date.getDay();
-            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // Sunday (0) or Saturday (6)
+          {/* All days of the month */}
+          {filteredDays.map((day) => {
+            const dayData = data.find(d => d.day === day) || { day, amount: 0, trades: 0, performance: 'neutral' };
 
             return (
               <div
                 key={dayData.day}
                 className={`aspect-square rounded-md sm:rounded-lg p-6 transition-all duration-200 ${getPerformanceColor(
                   dayData.performance
-                )} ${isWeekend ? 'grayscale cursor-not-allowed' : 'cursor-pointer touch-manipulation'}`}
-                onClick={isWeekend ? undefined : () => handleDayClick(dayData.day)}
+                )} cursor-pointer touch-manipulation`}
+                onClick={() => handleDayClick(dayData.day)}
               >
                 <div className="h-full flex flex-col justify-between text-sm sm:text-base">
                   <div className="font-semibold text-white text-center sm:text-left">
