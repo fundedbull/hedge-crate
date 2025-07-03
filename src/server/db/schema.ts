@@ -104,3 +104,27 @@ export const creditsTransactionTable = createTable(
 );
 
 export type CreditsTransaction = typeof creditsTransactionTable.$inferInsert;
+
+export const tradesTable = createTable(
+  "calendar_table",
+  {
+    id: bigint("id", { mode: "number", unsigned: true })
+      .primaryKey()
+      .autoincrement(),
+    userId: bigint("user_id", { mode: "number", unsigned: true }).notNull(),
+    trades: int("trades").notNull(),
+    income: decimal("income", { precision: 10, scale: 2 }).notNull(),
+    sentiment: singlestoreEnum("sentiment", [
+      "negative",
+      "neutral",
+      "positive",
+    ]).notNull(),
+    notes: text("notes"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (t) => {
+    return [index("user_id_index").on(t.userId)];
+  }
+);
+
+export type Trade = typeof tradesTable.$inferSelect;

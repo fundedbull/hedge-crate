@@ -8,6 +8,10 @@ import { QUERIES } from "./db/queries";
 import { db } from "./db";
 import { cardsTable, creditsTransactionTable, usersTable } from "./db/schema";
 import { eq } from "drizzle-orm";
+import {
+  findBestCashSecuredPuts,
+  getTopPicksAnalytical,
+} from "./polygon/cash-secured-puts";
 
 interface FormEntries {
   ticker: string;
@@ -142,11 +146,51 @@ export async function generateCrateAction(prevState: any, formData: FormData) {
 
     // Get AI recommendation
     console.log("Getting AI recommendation...");
-    const aiResponse = await CreateCommonCrate(
-      budget,
+
+    const results = await findBestCashSecuredPuts(
+      tickers,
       targetYieldPercent,
-      options
+      expiration,
+      budget
     );
+
+    console.log("\n=== RESULTS SUMMARY ===");
+    console.log(`Total contracts analyzed: ${results.summary.totalAnalyzed}`);
+    console.log(`Recommended contracts: ${results.summary.recommendedCount}`);
+    console.log(`Average yield: ${results.summary.averageYield}%`);
+    console.log(`Best yield found: ${results.summary.bestYield}%`);
+
+    // Get top 3 picks analytically (no LLM needed)
+    const topPicks = getTopPicksAnalytical(results.recommended, 3);
+
+    console.log("\n=== TOP 3 ANALYTICAL PICKS ===");
+    topPicks.forEach((contract, index) => {
+      console.log(
+        `\n${index + 1}. ${contract.ticker} - Score: ${
+          contract.overallScore
+        }/100`
+      );
+      console.log(
+        `   Strike: $${contract.strike} | Premium: $${contract.premium}`
+      );
+      console.log(`   Annualized Yield: ${contract.annualizedYield}%`);
+      console.log(
+        `   Total Premium Income: $${contract.totalPremiumIncome.toLocaleString()}`
+      );
+      console.log(
+        `   Risk: ${contract.isLowRisk ? "LOW" : "MODERATE"} | Liquidity: ${
+          contract.liquidityScore
+        }/100`
+      );
+    });
+
+    // const aiResponse = await CreateCommonCrate(
+    //   budget,
+    //   targetYieldPercent,
+    //   options
+    // );
+
+    const aiResponse = null;
 
     console.log("AI Response (raw):", aiResponse);
 

@@ -14,7 +14,7 @@ export interface TradingCalendarProps {
   data: TradingDay[];
   month: string;
   year: number;
-  onDayClick?: (day: TradingDay) => void;
+  onDayClick?: (day: number) => void;
   onMonthChange?: (direction: "prev" | "next") => void;
 }
 
@@ -66,13 +66,18 @@ export default function TradingCalendar({
   const weekDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   const weekDaysMobile = ["S", "M", "T", "W", "T", "F", "S"];
 
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ];
+
   // Calculate which day of week the month starts
   const startDay = getFirstDayOfMonth(month, year);
   const emptyDays = Array(startDay).fill(null);
 
-  const handleDayClick = (dayData: TradingDay) => {
+  const handleDayClick = (day: number) => {
     if (onDayClick) {
-      onDayClick(dayData);
+      onDayClick(day);
     }
   };
 
@@ -126,29 +131,35 @@ export default function TradingCalendar({
           ))}
 
           {/* Trading days */}
-          {data.map((dayData) => (
-            <div
-              key={dayData.day}
-              className={`aspect-square rounded-md sm:rounded-lg p-1 sm:p-3 transition-all duration-200 cursor-pointer touch-manipulation ${getPerformanceColor(
-                dayData.performance
-              )}`}
-              onClick={() => handleDayClick(dayData)}
-            >
-              <div className="h-full flex flex-col justify-between text-xs sm:text-sm">
-                <div className="font-semibold text-white text-center sm:text-left">
-                  {dayData.day.toString().padStart(2, "0")}
-                </div>
-                <div className="text-center flex-1 flex flex-col justify-center">
-                  <div className="font-medium text-white leading-tight">
-                    {formatAmount(dayData.amount)}
+          {data.map((dayData) => {
+            const date = new Date(year, monthNames.indexOf(month), dayData.day);
+            const dayOfWeek = date.getDay();
+            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // Sunday (0) or Saturday (6)
+
+            return (
+              <div
+                key={dayData.day}
+                className={`aspect-square rounded-md sm:rounded-lg p-6 transition-all duration-200 ${getPerformanceColor(
+                  dayData.performance
+                )} ${isWeekend ? 'grayscale cursor-not-allowed' : 'cursor-pointer touch-manipulation'}`}
+                onClick={isWeekend ? undefined : () => handleDayClick(dayData.day)}
+              >
+                <div className="h-full flex flex-col justify-between text-sm sm:text-base">
+                  <div className="font-semibold text-white text-center sm:text-left">
+                    {dayData.day.toString().padStart(2, "0")}
                   </div>
-                  <div className="text-[10px] sm:text-xs text-white/80 leading-tight">
-                    {dayData.trades} trades
+                  <div className="text-center flex-1 flex flex-col justify-center">
+                    <div className="font-medium text-white leading-tight text-base sm:text-lg">
+                      {formatAmount(dayData.amount)}
+                    </div>
+                    <div className="text-xs sm:text-sm text-white/80 leading-tight">
+                      {dayData.trades} trades
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from ".";
-import { cardsTable, creditsTransactionTable, usersTable } from "./schema";
+import { cardsTable, creditsTransactionTable, tradesTable, usersTable } from "./schema";
 import { and, desc, eq, sql } from "drizzle-orm";
 
 export const QUERIES = {
@@ -49,6 +49,21 @@ export const QUERIES = {
       .where(
         and(
           eq(cardsTable.userId, userId),
+          sql`YEAR(created_at) = ${year} AND MONTH(created_at) = ${month}`
+        )
+      );
+  },
+  getTradesByUserIdForMonth: function (
+    userId: number,
+    year: number,
+    month: number
+  ) {
+    return db
+      .select()
+      .from(tradesTable)
+      .where(
+        and(
+          eq(tradesTable.userId, userId),
           sql`YEAR(created_at) = ${year} AND MONTH(created_at) = ${month}`
         )
       );

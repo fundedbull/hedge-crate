@@ -22,7 +22,7 @@ export default function Page() {
           </h2>
           <p className="mb-4">
             Get 1 month of PRO MEMBERSHIP on us when you fully complete our{" "}
-            <Link href="/" className="underline">
+            <Link href="/" className="underline text-blue-500">
               survey
             </Link>
             . That's a $150 of value completely free. Click Link for Details.
@@ -39,11 +39,11 @@ export default function Page() {
           <p className="mb-4">
             When you refer a friend to sign up with their broker, once they sign
             up, they must subscribe to our{" "}
-            <Link href="/pricing" className="underline">
+            <Link href="/pricing" className="underline text-blue-500">
               Starter
             </Link>{" "}
             or{" "}
-            <Link href="/pricing" className="underline">
+            <Link href="/pricing" className="underline text-blue-500">
               PRO
             </Link>{" "}
             membership. After 90 days you will receive 1 month of Professional
@@ -74,7 +74,7 @@ export default function Page() {
           <p className="mb-4">
             And receive 1 month of Professional completely on us. It's simple -
             head to client section, select brokers, choose a{" "}
-            <Link href="/client/dashboard/broker" className="underline">
+            <Link href="/client/dashboard/broker" className="underline text-blue-500">
               broker
             </Link>
             , SIGN UP. And when we receive confirmation you fully completed your
