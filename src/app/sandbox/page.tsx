@@ -2,13 +2,7 @@
 import OptionsTradingDialog from "@/components/options-trading-dialog";
 import StockFilter from "@/components/stock-filter";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -31,12 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  generateCrateAction,
-  generateRareCrateAction,
-  signInRedirect,
-  generateCommonCrateAction,
-} from "@/server/actions";
+import { generateCommonCrateAction } from "@/server/actions";
 import {
   HoverCard,
   HoverCardTrigger,
@@ -167,25 +156,8 @@ export default function Page() {
           <OptionsTradingDialog
             open={dialogOpen}
             onOpenChange={setDialogOpen}
-            data={state.data}
+            data={state.data!}
           />
-          // <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          //   <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto dark">
-          //     <DialogTitle>{state.message.ticker} Common Crate</DialogTitle>
-          //     <DialogDescription>
-          //       This is a cash-secured put selling strategy where you sell put
-          //       option contracts to generate immediate premium income.
-          //     </DialogDescription>
-          //     <div className="mt-4">
-          //       <p>{state.message.setup_plan}</p>
-          //       <p>{state.message.exit_plan["PROFIT SCENARIO"]}</p>
-          //       <p>{state.message.exit_plan["ASSIGNMENT SCENARIO"]}</p>
-          //       <p>{state.message.exit_plan["EARLY EXIT"]}</p>
-          //       <p>{state.message.exit_plan["STOP LOSS"]}</p>
-          //       <p></p>
-          //     </div>
-          //   </DialogContent>
-          //</Dialog>
         )}
 
         <Tabs defaultValue="common" className="w-full max-w-2xl ">
