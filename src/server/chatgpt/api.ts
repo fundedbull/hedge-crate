@@ -32,7 +32,7 @@ export default async function GenerateCSPStrategy(contract: OptionsTrade) {
   console.log("ATTEMPTING TO GEN CSPS");
   try {
     const response = await client.responses.parse({
-      model: "gpt-4o-mini",
+      model: "gpt-4.1-mini",
       input: [
         { role: "system", content: cash_secured_puts_prompt },
         { role: "user", content: JSON.stringify(contract) },
