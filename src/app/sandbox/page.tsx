@@ -35,6 +35,7 @@ import {
   generateCrateAction,
   generateRareCrateAction,
   signInRedirect,
+  generateCommonCrateAction,
 } from "@/server/actions";
 import {
   HoverCard,
@@ -65,11 +66,11 @@ const initialState = {
 
 export default function Page() {
   const [state, formAction, pending] = useActionState(
-    generateCrateAction,
+    generateCommonCrateAction,
     initialState
   );
   const [ticker, setTicker] = useState("");
-  
+
   const [budget, setBudget] = useState("");
   const [riskAmount, setRiskAmount] = useState("");
   const [rewardAmount, setRewardAmount] = useState("");
@@ -93,8 +94,6 @@ export default function Page() {
     "MSFT",
     "META",
   ];
-
-  
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -218,8 +217,6 @@ export default function Page() {
                         </SelectContent>
                       </Select>
                     </div>
-
-                    
 
                     <div className="space-y-2">
                       <Label htmlFor="budget" className="flex">
@@ -369,7 +366,7 @@ export default function Page() {
               <form action={formAction}>
                 <input type="hidden" name="ticker" value={ticker} />
                 <input type="hidden" name="type" value={"common"} />
-                
+
                 <input type="hidden" name="budget" value={budget} />
                 <input type="hidden" name="riskAmount" value={riskAmount} />
                 <input type="hidden" name="rewardAmount" value={rewardAmount} />

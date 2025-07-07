@@ -26,7 +26,7 @@ interface OptionsData {
   premium_per_contract: number;
   total_premium_income: number;
   cash_required: number;
-  annualized_yield: number;
+  yield: number;
   break_even_price: number;
   setup_plan: string;
   exit_plan: {
@@ -90,7 +90,7 @@ export default function OptionsTradingDialog({
               variant="outline"
               className="bg-green-900 text-green-300 border-green-600"
             >
-              {formatPercentage(data.annualized_yield)} APY
+              {formatPercentage(data.yield)} APY
             </Badge>
           </div>
         </div>
@@ -312,7 +312,7 @@ export default function OptionsTradingDialog({
                   <div className="flex justify-between items-center py-2 border-b border-gray-800">
                     <span className="text-gray-400">Annualized Yield:</span>
                     <span className="font-medium text-green-400">
-                      {formatPercentage(data.annualized_yield)}
+                      {formatPercentage(data.yield)}
                     </span>
                   </div>
                 </div>

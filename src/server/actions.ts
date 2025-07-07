@@ -1,7 +1,7 @@
 "use server";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { findOptions } from "./polygon/api";
+import { find_options, findOptions } from "./polygon/api";
 import { CreateCommonCrate, CreateRareCrate } from "./chatgpt/api";
 import { findCoveredCallOptions } from "./polygon/covered-calls";
 import { QUERIES } from "./db/queries";
@@ -12,6 +12,7 @@ import {
   findBestCashSecuredPuts,
   getTopPicksAnalytical,
 } from "./polygon/cash-secured-puts";
+import GenerateCSPStrategy from "./chatgpt/cash-secured-puts";
 
 interface FormEntries {
   ticker: string;
@@ -289,4 +290,65 @@ export async function generateRareCrateAction() {
   console.log("CreateRareCrate response:", res);
 
   console.log("generateRareCrateAction finished");
+}
+
+export async function generateCommonCrateAction(
+  prevState: any,
+  formData: FormData
+) {
+  const session = await auth();
+  if (!session.userId) {
+    console.log("User not signed in, redirecting to /sign-in");
+    return redirect("/sign-in");
+  }
+
+  const [user] = await QUERIES.getUserByClerkId(session.userId);
+
+  if (!user || user.credits < 1) {
+    console.log("User has insufficient credits or does not exist.");
+    return {
+      data: null,
+      error: "You have insufficient credits to open a crate.",
+      success: false,
+    };
+  }
+
+  // Extract and process form data with defaults
+  const data = processFormData(formData);
+
+  const getDatePlusMonth = () =>
+    new Date(new Date().setMonth(new Date().getMonth() + 1))
+      .toISOString()
+      .split("T")[0];
+  const budget = data.budget;
+  const targetYieldPercent = 0.01;
+  const expiration = getDatePlusMonth();
+  const ticker = data.ticker;
+
+  try {
+    const puts = await find_options(ticker, expiration, budget);
+    if (puts.length == 0) {
+      return {
+        data: null,
+        error:
+          "There were no contracts to find with your filter options for this instrument.",
+        success: false,
+      };
+    }
+
+    const strategy = await GenerateCSPStrategy(puts[0]);
+    console.log(strategy);
+    return {
+      data: JSON.parse(strategy ?? ""), // The empty string should not happen but as TODO: Update OpenAI and move over to strctured output where format is guaranteed, and enforce type
+      error: null,
+      success: true,
+    };
+  } catch (err) {
+    return {
+      data: null,
+      error:
+        "An unexpected error occurred while generating your crate. Please try again.",
+      success: false,
+    };
+  }
 }
