@@ -81,11 +81,14 @@ export async function generateCommonCrateAction(
   prevState: any,
   formData: FormData
 ) {
+  console.log("Starting generateCommonCrateAction");
+
   const session = await auth();
   if (!session.userId) {
     console.log("User not signed in, redirecting to /sign-in");
     return redirect("/sign-in");
   }
+  console.log("User session found:", session.userId);
 
   const [user] = await QUERIES.getUserByClerkId(session.userId);
 
@@ -97,9 +100,11 @@ export async function generateCommonCrateAction(
       success: false,
     };
   }
+  console.log("User has sufficient credits:", user.credits);
 
   // Extract and process form data with defaults
   const data = processFormData(formData);
+  console.log("Processed form data:", data);
 
   const getDatePlusMonth = () =>
     new Date(new Date().setMonth(new Date().getMonth() + 1))
@@ -110,9 +115,16 @@ export async function generateCommonCrateAction(
   const expiration = getDatePlusMonth();
   const ticker = data.ticker;
 
+  console.log("Searching for options with the following parameters:", {
+    ticker,
+    expiration,
+    budget,
+  });
+
   try {
     const puts = await findOptions(ticker, expiration, budget);
     if (puts.length == 0) {
+      console.log("No contracts found for the given filter options.");
       return {
         data: null,
         error:
@@ -120,8 +132,11 @@ export async function generateCommonCrateAction(
         success: false,
       };
     }
+    console.log("Found", puts.length, "puts contracts.");
 
+    console.log("Generating CSP strategy with the first put contract:", puts[0]);
     const strategy: OptionsData | null = await GenerateCSPStrategy(puts[0]);
+    console.log("CSP strategy generated successfully:", strategy);
 
     return {
       data: strategy,
@@ -129,7 +144,7 @@ export async function generateCommonCrateAction(
       success: true,
     };
   } catch (err) {
-    console.log(err);
+    console.error("An error occurred during crate generation:", err);
     return {
       data: null,
       error:
