@@ -134,12 +134,44 @@ export async function generateCommonCrateAction(
     }
     console.log("Found", puts.length, "puts contracts.");
 
-    console.log("Generating CSP strategy with the first put contract:", puts[0]);
-    const strategy: OptionsData | null = await GenerateCSPStrategy(puts[0]);
+    console.log(
+      "Generating CSP strategy with the first put contract:",
+      puts[0]
+    );
+    const strategy = await GenerateCSPStrategy(puts[0]);
+
+    if (!strategy) {
+      return {
+        data: null,
+        error:
+          "An unexpected error occurred while generating your crate. Please try again.",
+        success: false,
+      };
+    }
+
     console.log("CSP strategy generated successfully:", strategy);
 
     return {
-      data: strategy,
+      data: {
+        ticker: strategy.ticker,
+        strike: strategy.strike,
+        expiration: strategy.expiration,
+        contracts_to_sell: strategy.contracts_to_sell,
+        premium_per_contract: strategy.premium_per_contract,
+        total_premium_income: strategy.total_premium_income,
+        cash_required: strategy.cash_required,
+        yield: strategy.yield,
+        break_even_price: strategy.break_even_price,
+        setup_plan: strategy.setup_plan,
+        exit_plan: {
+          "PROFIT SCENARIO": strategy.exit_plan_profit_scenario,
+          "ASSIGNMENT SCENARIO": strategy.exit_plan_assignment_scenario,
+          "EARLY EXIT": strategy.exit_plan_early_exit,
+          "STOP LOSS": strategy.exit_plan_stop_loss,
+        },
+        risk_assessment: strategy.risk_assessment,
+        reasoning: strategy.reasoning,
+      },
       error: null,
       success: true,
     };
