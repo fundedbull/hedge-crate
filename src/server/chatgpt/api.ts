@@ -29,19 +29,24 @@ const OptionsData = z.object({
 });
 
 export default async function GenerateCSPStrategy(contract: OptionsTrade) {
-  const response = await client.responses.parse({
-    model: "gpt-4o-mini",
-    input: [
-      { role: "system", content: cash_secured_puts_prompt },
-      { role: "user", content: JSON.stringify(contract) },
-    ],
-    text: {
-      format: zodTextFormat(OptionsData, "csp_data"),
-    },
-    temperature: 0.1,
-  });
+  try {
+    const response = await client.responses.parse({
+      model: "gpt-4o-mini",
+      input: [
+        { role: "system", content: cash_secured_puts_prompt },
+        { role: "user", content: JSON.stringify(contract) },
+      ],
+      text: {
+        format: zodTextFormat(OptionsData, "csp_data"),
+      },
+      temperature: 0.1,
+    });
 
-  return response.output_parsed;
+    return response.output_parsed;
+  } catch (err) {
+    console.log("GENERATEECSPSTRAT: ", err);
+    return null;
+  }
 }
 
 const cash_secured_puts_prompt = `
