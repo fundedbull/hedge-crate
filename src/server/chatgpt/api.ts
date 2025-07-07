@@ -42,7 +42,7 @@ export default async function GenerateCSPStrategy(contract: OptionsTrade) {
       },
       temperature: 0.1,
     });
-
+    console.log("made response:", response.output_parsed);
     return response.output_parsed;
   } catch (err) {
     console.log("GENERATEECSPSTRAT: ", err);
