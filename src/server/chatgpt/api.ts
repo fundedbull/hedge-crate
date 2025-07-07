@@ -29,6 +29,7 @@ const OptionsData = z.object({
 });
 
 export default async function GenerateCSPStrategy(contract: OptionsTrade) {
+  console.log("ATTEMPTING TO GEN CSPS");
   try {
     const response = await client.responses.parse({
       model: "gpt-4o-mini",
