@@ -116,9 +116,10 @@ export async function generateCommonCrateAction(
   const targetYieldPercent = 0.01;
   const expiration = getDatePlusMonth();
   const ticker = data.ticker;
-
+  const reward = data.rewardAmount;
+  const risk = data.riskAmount;
   try {
-    const puts = await findOptions(ticker, expiration, budget);
+    const puts = await findOptions(ticker, expiration, budget, risk, reward);
     if (puts.length == 0) {
       console.log("No contracts found for the given filter options.");
       return {

@@ -24,7 +24,9 @@ export type OptionsTrade = {
 export async function findOptions(
   ticker: string,
   expiration: string,
-  budget: number
+  budget: number,
+  risk: number,
+  reward: number
 ) {
   const puts: OptionsTrade[] = [];
 
@@ -61,6 +63,14 @@ export async function findOptions(
       const total_premium = Math.round(premium * max_contracts);
 
       if (max_contracts == 0) continue;
+
+      const maxLoss = strike * 100 - premium * 100;
+      const rewardAmount = premium * 100;
+
+      const actualRatio = maxLoss / rewardAmount;
+      const userDesiredRatio = risk / reward; // 1/2 = 0.5
+
+      if (actualRatio > userDesiredRatio) continue; // Skip if ratio is worse than desired
 
       puts.push({
         ticker: ticker,
