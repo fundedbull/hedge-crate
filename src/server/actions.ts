@@ -6,6 +6,9 @@ import { findOptions } from "./polygon/api";
 import { QUERIES } from "./db/queries";
 import GenerateCSPStrategy from "./chatgpt/api";
 import { OptionsData } from "@/lib/types";
+import { db } from "./db";
+import { cardsTable, creditsTransactionTable, usersTable } from "./db/schema";
+import { eq } from "drizzle-orm";
 
 interface FormEntries {
   ticker: string;
@@ -100,7 +103,6 @@ export async function generateCommonCrateAction(
       success: false,
     };
   }
-  console.log("User has sufficient credits:", user.credits);
 
   // Extract and process form data with defaults
   const data = processFormData(formData);
@@ -114,12 +116,6 @@ export async function generateCommonCrateAction(
   const targetYieldPercent = 0.01;
   const expiration = getDatePlusMonth();
   const ticker = data.ticker;
-
-  console.log("Searching for options with the following parameters:", {
-    ticker,
-    expiration,
-    budget,
-  });
 
   try {
     const puts = await findOptions(ticker, expiration, budget);
@@ -149,7 +145,40 @@ export async function generateCommonCrateAction(
       };
     }
 
-    //console.log("CSP strategy generated successfully:", strategy);
+    await Promise.all([
+      db
+        .update(usersTable)
+        .set({ credits: user.credits - 1 })
+        .where(eq(usersTable.clerkId, session.userId)),
+      db.insert(creditsTransactionTable).values({
+        userId: user.id,
+        amount: 1,
+        type: "crate_open",
+      }),
+      db.insert(cardsTable).values({
+        userId: user.id,
+        ticker: strategy["ticker"],
+        strike: strategy["strike"].toString(),
+        expiration: strategy["expiration"],
+        contract: "",
+        contractsToSell: strategy["contracts_to_sell"],
+        premiumPerContract: strategy["premium_per_contract"].toString(),
+        totalPremiumIncome: strategy["total_premium_income"].toString(),
+        cashRequired: strategy["cash_required"].toString(),
+        annualizedYield: strategy.yield.toString(),
+        breakEvenPrice: strategy["break_even_price"].toString(),
+        setupPlan: strategy["setup_plan"],
+        exitPlan: {
+          "PROFIT SCENARIO": strategy.exit_plan_profit_scenario,
+          "ASSIGNMENT SCENARIO": strategy.exit_plan_assignment_scenario,
+          "EARLY EXIT": strategy.exit_plan_early_exit,
+          "STOP LOSS": strategy.exit_plan_stop_loss,
+        },
+        riskAssessment: strategy["risk_assessment"],
+        reasoning: strategy["reasoning"],
+        rarity: "common",
+      }),
+    ]);
 
     return {
       data: {
