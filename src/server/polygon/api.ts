@@ -33,10 +33,11 @@ export async function findOptions(
     const max_strike_price = currentPrice - currentPrice * 0.05;
     const min_strike_price = currentPrice - currentPrice * 0.2;
     const response = await rest.options.snapshotOptionChain(ticker, {
+      "expiration_date.lte": expiration,
       "strike_price.gte": min_strike_price,
       "strike_price.lte": max_strike_price,
       contract_type: "put",
-      limit: 50, // Keep this for 50 but maybe pro subscription can scan through more
+      limit: 250, // Keep this for 50 but maybe pro subscription can scan through more
     });
 
     for (const contract of response.results || []) {
@@ -64,7 +65,7 @@ export async function findOptions(
       puts.push({
         ticker: ticker,
         strike: strike,
-        expiration: expiration,
+        expiration: contract.details?.expiration_date!,
         bid: bid,
         premium_per_contract: Math.round(premium),
         required_cash_per_contract: required_cash,
@@ -75,8 +76,8 @@ export async function findOptions(
         underlying_price: Number(contract.underlying_asset?.price),
         max_contracts: max_contracts,
         total_premium_income: total_premium,
-        premium_gained: 0.8 * min_strike_price * 100 * max_contracts,
-        break_even_price: Math.round(strike - bid),
+        premium_gained: total_premium,
+        break_even_price: Number((strike - bid).toFixed(4)),
       });
     }
   } catch (err) {

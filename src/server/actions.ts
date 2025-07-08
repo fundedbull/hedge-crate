@@ -149,7 +149,7 @@ export async function generateCommonCrateAction(
       };
     }
 
-    console.log("CSP strategy generated successfully:", strategy);
+    //console.log("CSP strategy generated successfully:", strategy);
 
     return {
       data: {
@@ -172,7 +172,7 @@ export async function generateCommonCrateAction(
         risk_assessment: strategy.risk_assessment,
         reasoning: strategy.reasoning,
       },
-      error: null,
+      error: "",
       success: true,
     };
   } catch (err) {

@@ -31,6 +31,7 @@ const formatDate = (dateString: string) => {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 };
 
@@ -70,7 +71,7 @@ export default function OptionsTradingDialog({
               variant="outline"
               className="bg-green-900 text-green-300 border-green-600"
             >
-              {formatPercentage(data.yield)} APY
+              {formatPercentage(data.yield)} Yield
             </Badge>
           </div>
         </div>
