@@ -58,6 +58,12 @@ Generate a structured analysis of the provided pre-calculated options data with 
 JSON object with pre-calculated metrics:
 - ticker, strike, expiration, contracts_to_sell, premium_per_contract, total_premium_income, cash_required, yield, break_even_price, stop_loss_price, max_allowed_loss
 
+## LOGIC FOR STOP LOSS
+- If "stop_loss_price" is **not** -1.23456, then use:
+  "If stock falls below $[stop_loss_price], consider closing the position to limit downside risk (max allowed loss: $[max_allowed_loss])."
+- If "stop_loss_price" **is** -1.23456, use the fallback:
+  "If stock drops significantly below $[break_even_price], consider closing to limit losses."
+
 ## OUTPUT FORMAT
 Return ONLY a valid JSON object with this exact structure:
 
@@ -75,7 +81,7 @@ Return ONLY a valid JSON object with this exact structure:
   "exit_plan_profit_scenario": "Actions when stock closes above strike at expiration",
   "exit_plan_assignment_scenario": "Actions when assigned shares at expiration", 
   "exit_plan_early_exit": "Conditions for early profit-taking",
-  "exit_plan_stop_loss": "Only include this key if stop_loss_price !== -1.23456",
+  "exit_plan_stop_loss": "See logic above",
   "risk_assessment": "Key risks and mitigation strategies",
   "reasoning": "Why this represents a good opportunity"
 }
@@ -90,7 +96,9 @@ Return ONLY a valid JSON object with this exact structure:
 
 **exit_plan_early_exit**: "If premium decays to 70–80% of original value with time remaining, consider buying back puts to lock profit."
 
-**exit_plan_stop_loss**: Only include this key if \`stop_loss_price !== -1.23456\`. If included, write: "If stock falls below $[stop_loss_price], consider closing the position to limit downside risk (max allowed loss: $[max_allowed_loss])."
+**exit_plan_stop_loss**:
+- If stop_loss_price !== -1.23456: "If stock falls below $[stop_loss_price], consider closing the position to limit downside risk (max allowed loss: $[max_allowed_loss])."
+- If stop_loss_price === -1.23456: "If stock drops significantly below $[break_even_price], consider closing to limit losses."
 
 **risk_assessment**: "Primary risks: Assignment if stock below $[strike], unrealized losses if below $[break_even_price], capital tied up [days] days. Mitigation: Monitor price action, have assignment plan ready. (All Trades are not Financial Advice)"
 
