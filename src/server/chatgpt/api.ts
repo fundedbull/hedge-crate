@@ -88,11 +88,11 @@ Return ONLY a valid JSON object with this exact structure:
 
 **exit_plan_assignment_scenario**: "Stock closes below $[strike]. Assigned [contracts_to_sell * 100] shares at $[strike]. Effective cost basis $[break_even_price] after premium. Hold or sell covered calls."
 
-**exit_plan_early_exit**: "If premium decays to 25-50% of original value with time remaining, consider buying back puts to lock profit."
+**exit_plan_early_exit**: "If premium decays to 70-80% of original value with time remaining, consider buying back puts to lock profit."
 
 **exit_plan_stop_loss**: "If stock drops significantly below $[break_even_price], consider closing to limit losses."
 
-**risk_assessment**: "Primary risks: Assignment if stock below $[strike], unrealized losses if below $[break_even_price], capital tied up [days] days. Mitigation: Monitor price action, have assignment plan ready."
+**risk_assessment**: "Primary risks: Assignment if stock below $[strike], unrealized losses if below $[break_even_price], capital tied up [days] days. Mitigation: Monitor price action, have assignment plan ready. (All Trades are not Financial Advice)"
 
 **reasoning**: "Offers [yield]% yield with [risk assessment]. Provides $[total_premium_income] income over [days] days using $[cash_required] capital."
 
