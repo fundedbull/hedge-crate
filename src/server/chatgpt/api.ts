@@ -73,7 +73,7 @@ Return ONLY a valid JSON object with this exact structure:
   "break_even_price": [break_even_price from input],
   "setup_plan": "Step-by-step execution with specific numbers",
   "exit_plan_profit_scenario": "Actions when stock closes above strike at expiration",
-  "exit_plan_assignment_scenario": "Actions when assigned shares at expiration",
+  "exit_plan_assignment_scenario": "Actions when assigned shares at expiration", 
   "exit_plan_early_exit": "Conditions for early profit-taking",
   "exit_plan_stop_loss": "Only include this key if stop_loss_price !== -1.23456",
   "risk_assessment": "Key risks and mitigation strategies",
@@ -88,9 +88,9 @@ Return ONLY a valid JSON object with this exact structure:
 
 **exit_plan_assignment_scenario**: "Stock closes below $[strike]. Assigned [contracts_to_sell * 100] shares at $[strike]. Effective cost basis $[break_even_price] after premium. Hold or sell covered calls."
 
-**exit_plan_early_exit**: "If premium decays to 70-80% of original value with time remaining, consider buying back puts to lock profit."
+**exit_plan_early_exit**: "If premium decays to 70–80% of original value with time remaining, consider buying back puts to lock profit."
 
-**exit_plan_stop_loss**: Only include this if \`stop_loss_price !== -1.23456\`. If included: "If stock falls below $[stop_loss_price], close position to limit potential loss (max allowed loss: $[max_allowed_loss])."
+**exit_plan_stop_loss**: Only include this key if \`stop_loss_price !== -1.23456\`. If included, write: "If stock falls below $[stop_loss_price], consider closing the position to limit downside risk (max allowed loss: $[max_allowed_loss])."
 
 **risk_assessment**: "Primary risks: Assignment if stock below $[strike], unrealized losses if below $[break_even_price], capital tied up [days] days. Mitigation: Monitor price action, have assignment plan ready. (All Trades are not Financial Advice)"
 
