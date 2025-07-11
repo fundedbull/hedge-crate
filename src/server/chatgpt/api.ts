@@ -94,7 +94,7 @@ Return ONLY a valid JSON object with this exact structure:
 
 **risk_assessment**: "Primary risks: Assignment if stock below $[strike], unrealized losses if below $[break_even_price], capital tied up [days] days. Mitigation: Monitor price action, have assignment plan ready. (All Trades are not Financial Advice)"
 
-**reasoning**: "Offers [yield]% yield with [risk assessment]. Provides $[total_premium_income] income over [days] days using $[cash_required] capital."
+**reasoning**: "[Generate a pros and cons trade about the trade with the given information. Keep this but up two sentences max for pros and cons each.]"
 
 Keep responses concise and actionable with specific numbers from the input data.
 `;
