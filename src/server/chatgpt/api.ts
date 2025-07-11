@@ -56,7 +56,7 @@ Generate a structured analysis of the provided pre-calculated options data with 
 
 ## INPUT FORMAT
 JSON object with pre-calculated metrics:
-- ticker, strike, expiration, contracts_to_sell, premium_per_contract, total_premium_income, cash_required, yield, break_even_price
+- ticker, strike, expiration, contracts_to_sell, premium_per_contract, total_premium_income, cash_required, yield, break_even_price, stop_loss_price, max_allowed_loss
 
 ## OUTPUT FORMAT
 Return ONLY a valid JSON object with this exact structure:
@@ -73,9 +73,9 @@ Return ONLY a valid JSON object with this exact structure:
   "break_even_price": [break_even_price from input],
   "setup_plan": "Step-by-step execution with specific numbers",
   "exit_plan_profit_scenario": "Actions when stock closes above strike at expiration",
-  "exit_plan_assignment_scenario": "Actions when assigned shares at expiration", 
+  "exit_plan_assignment_scenario": "Actions when assigned shares at expiration",
   "exit_plan_early_exit": "Conditions for early profit-taking",
-  "exit_plan_stop_loss": "Conditions to limit losses",
+  "exit_plan_stop_loss": "Only include this key if stop_loss_price !== -1.23456",
   "risk_assessment": "Key risks and mitigation strategies",
   "reasoning": "Why this represents a good opportunity"
 }
@@ -90,7 +90,7 @@ Return ONLY a valid JSON object with this exact structure:
 
 **exit_plan_early_exit**: "If premium decays to 70-80% of original value with time remaining, consider buying back puts to lock profit."
 
-**exit_plan_stop_loss**: "If stock drops significantly below $[break_even_price], consider closing to limit losses."
+**exit_plan_stop_loss**: Only include this if \`stop_loss_price !== -1.23456\`. If included: "If stock falls below $[stop_loss_price], close position to limit potential loss (max allowed loss: $[max_allowed_loss])."
 
 **risk_assessment**: "Primary risks: Assignment if stock below $[strike], unrealized losses if below $[break_even_price], capital tied up [days] days. Mitigation: Monitor price action, have assignment plan ready. (All Trades are not Financial Advice)"
 

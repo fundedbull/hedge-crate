@@ -48,7 +48,7 @@ const processFormData = (formData: FormData): ProcessedData => {
     type: "common",
     budget: "10000",
     riskAmount: "1",
-    rewardAmount: "0.05", // This gives 5% target yield
+    rewardAmount: "1", // This gives 5% target yield
   };
 
   // Apply defaults for empty values

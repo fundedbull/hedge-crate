@@ -19,6 +19,8 @@ export type OptionsTrade = {
   total_premium_income: number;
   premium_gained: number;
   break_even_price: number;
+  stop_loss_price: number;
+  max_allowed_loss: number;
 };
 
 export async function findOptions(
@@ -39,7 +41,7 @@ export async function findOptions(
       "strike_price.gte": min_strike_price,
       "strike_price.lte": max_strike_price,
       contract_type: "put",
-      limit: 250, // Keep this for 50 but maybe pro subscription can scan through more
+      limit: 250,
     });
 
     for (const contract of response.results || []) {
@@ -68,9 +70,16 @@ export async function findOptions(
       const rewardAmount = premium * 100;
 
       const actualRatio = maxLoss / rewardAmount;
-      const userDesiredRatio = risk / reward; // 1/2 = 0.5
+      const userDesiredRatio = risk / reward;
 
-      if (actualRatio > userDesiredRatio) continue; // Skip if ratio is worse than desired
+      if (actualRatio > userDesiredRatio) continue;
+
+      // Calculate stop loss based on user's RRR
+      const maxAllowedLoss = rewardAmount * userDesiredRatio;
+      const stopLossPrice =
+        risk == 1 && reward == 1
+          ? Number((strike - maxAllowedLoss / 100).toFixed(2))
+          : -1.23456;
 
       puts.push({
         ticker: ticker,
@@ -88,10 +97,13 @@ export async function findOptions(
         total_premium_income: total_premium,
         premium_gained: total_premium,
         break_even_price: Number((strike - bid).toFixed(4)),
+        stop_loss_price: stopLossPrice,
+        max_allowed_loss: Math.round(maxAllowedLoss),
       });
     }
   } catch (err) {
     console.log("Error at find_options: ", err);
   }
+
   return puts.sort((a, b) => b.score - a.score);
 }
