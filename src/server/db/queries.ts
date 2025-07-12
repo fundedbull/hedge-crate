@@ -1,6 +1,11 @@
 import "server-only";
 import { db } from ".";
-import { cardsTable, creditsTransactionTable, tradesTable, usersTable } from "./schema";
+import {
+  cardsTable,
+  creditsTransactionTable,
+  tradesTable,
+  usersTable,
+} from "./schema";
 import { and, desc, eq, sql } from "drizzle-orm";
 
 export const QUERIES = {
@@ -10,12 +15,12 @@ export const QUERIES = {
   getCratesByUserId: function (userId: number) {
     return db.select().from(cardsTable).where(eq(cardsTable.userId, userId));
   },
-  getCratesByUserIdWithPagination: function (
+  getCratesByUserIdWithPagination: async function (
     userId: number,
     page: number,
     pageSize: number
   ) {
-    return db
+    return await db
       .select()
       .from(cardsTable)
       .where(eq(cardsTable.userId, userId))
@@ -30,8 +35,8 @@ export const QUERIES = {
       .where(eq(cardsTable.userId, userId));
     return result[0].count;
   },
-  getRecentCratesByUserId: function (userId: number) {
-    return db
+  getRecentCratesByUserId: async function (userId: number) {
+    return await db
       .select()
       .from(cardsTable)
       .where(eq(cardsTable.userId, userId))
