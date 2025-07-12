@@ -58,20 +58,22 @@ export const QUERIES = {
         )
       );
   },
-  getTradesByUserIdForMonth: function (
+  getTradesByUserIdForMonth: async function (
     userId: number,
     year: number,
     month: number
   ) {
-    return db
+    return await db
       .select()
       .from(tradesTable)
       .where(
         and(
           eq(tradesTable.userId, userId),
-          sql`YEAR(created_at) = ${year} AND MONTH(created_at) = ${month}`
+          sql`YEAR(${tradesTable.createdAt}) = ${year}`,
+          sql`MONTH(${tradesTable.createdAt}) = ${month}`
         )
-      );
+      )
+      .orderBy(tradesTable.createdAt);
   },
   getTodayCrateOpensCount: async function (userId: number) {
     const result = await db

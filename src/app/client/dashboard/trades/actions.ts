@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import { db } from "@/server/db";
 import { tradesTable } from "@/server/db/schema";
