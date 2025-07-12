@@ -31,7 +31,7 @@ export async function findOptions(
   reward: number
 ) {
   const puts: OptionsTrade[] = [];
-
+  console.log("RRR", risk, reward);
   try {
     const currentPrice = await getLatestPrice(ticker);
     const max_strike_price = currentPrice - currentPrice * 0.05;
@@ -70,16 +70,17 @@ export async function findOptions(
       const rewardAmount = premium * 100;
 
       const actualRatio = maxLoss / rewardAmount;
-      const userDesiredRatio = risk / reward;
+      const userDesiredRatio =
+        (isNaN(risk) ? 100 : risk) / (isNaN(reward) ? 200 : reward);
 
       if (actualRatio > userDesiredRatio) continue;
 
       // Calculate stop loss based on user's RRR
       const maxAllowedLoss = rewardAmount * userDesiredRatio;
       const stopLossPrice =
-        risk == 1 && reward == 1
-          ? Number((strike - maxAllowedLoss / 100).toFixed(2))
-          : -1.23456;
+        isNaN(risk) || isNaN(reward)
+          ? NaN
+          : Number((strike - maxAllowedLoss / 100).toFixed(2));
 
       puts.push({
         ticker: ticker,

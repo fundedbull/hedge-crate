@@ -47,8 +47,8 @@ const processFormData = (formData: FormData): ProcessedData => {
     ticker: "ASTS",
     type: "common",
     budget: "10000",
-    riskAmount: "1",
-    rewardAmount: "1", // This gives 5% target yield
+    riskAmount: "NaN",
+    rewardAmount: "NaN", // This gives 5% target yield
   };
 
   // Apply defaults for empty values
@@ -113,7 +113,7 @@ export async function generateCommonCrateAction(
       .toISOString()
       .split("T")[0];
   const budget = data.budget;
-  const targetYieldPercent = 0.01;
+  //const targetYieldPercent = 0.01;
   const expiration = getDatePlusMonth();
   const ticker = data.ticker;
   const reward = data.rewardAmount;

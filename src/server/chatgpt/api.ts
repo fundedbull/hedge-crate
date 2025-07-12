@@ -32,7 +32,7 @@ export default async function GenerateCSPStrategy(contract: OptionsTrade) {
     const response = await client.responses.parse({
       model: "gpt-4.1-mini",
       input: [
-        { role: "system", content: cash_secured_puts_prompt },
+        { role: "system", content: csp_prompt(contract.stop_loss_price) },
         { role: "user", content: JSON.stringify(contract) },
       ],
       text: {
@@ -48,61 +48,63 @@ export default async function GenerateCSPStrategy(contract: OptionsTrade) {
   }
 }
 
-const cash_secured_puts_prompt = `
-You are a quantitative analyst specializing in cash-secured put strategies for income generation.
+function csp_prompt(stop_loss: number) {
+  const cash_secured_puts_prompt = `
+  You are a quantitative analyst specializing in cash-secured put strategies for income generation.
+  
+  ## TASK
+  Generate a structured analysis of the provided pre-calculated options data with specific execution and risk management guidance.
+  
+  ## INPUT FORMAT
+  JSON object with pre-calculated metrics:
+  - ticker, strike, expiration, contracts_to_sell, premium_per_contract, total_premium_income, cash_required, yield, break_even_price, stop_loss_price, max_allowed_loss
+  
 
-## TASK
-Generate a structured analysis of the provided pre-calculated options data with specific execution and risk management guidance.
+  
+  ## OUTPUT FORMAT
+  Return ONLY a valid JSON object with this exact structure:
+  
+  {
+    "ticker": "[ticker from input]",
+    "strike": [strike from input],
+    "expiration": "[expiration from input]",
+    "contracts_to_sell": [contracts_to_sell from input],
+    "premium_per_contract": [premium_per_contract from input],
+    "total_premium_income": [total_premium_income from input],
+    "cash_required": [cash_required from input],
+    "yield": [yield from input],
+    "break_even_price": [break_even_price from input],
+    "setup_plan": "Step-by-step execution with specific numbers",
+    "exit_plan_profit_scenario": "Actions when stock closes above strike at expiration",
+    "exit_plan_assignment_scenario": "Actions when assigned shares at expiration", 
+    "exit_plan_early_exit": "Conditions for early profit-taking",
+    "exit_plan_stop_loss": "See logic above",
+    "risk_assessment": "Key risks and mitigation strategies",
+    "reasoning": "Why this represents a good opportunity"
+  }
+  
+  ## CONTENT GUIDELINES
+  
+  **setup_plan**: "1. Sell [contracts_to_sell] [ticker] puts at $[strike] strike expiring [expiration] 2. Collect $[premium_per_contract] premium per contract ($[total_premium_income] total) 3. Secure with $[cash_required] cash 4. Target yield: [yield]% 5. Break-even: $[break_even_price]"
+  
+  **exit_plan_profit_scenario**: "Stock closes above $[strike]. Keep $[total_premium_income] premium for [yield]% return. No assignment, cash freed for next trade."
+  
+  **exit_plan_assignment_scenario**: "Stock closes below $[strike]. Assigned [contracts_to_sell * 100] shares at $[strike]. Effective cost basis $[break_even_price] after premium. Hold or sell covered calls."
+  
+  **exit_plan_early_exit**: "If premium decays to 70–80% of original value with time remaining, consider buying back puts to lock profit."
+  
+  **exit_plan_stop_loss**: "If stock drops significantly below $[break_even_price], ${
+    isNaN(stop_loss)
+      ? "consider closing to limit losses."
+      : "consider closing the position to limit downside risk (max allowed loss: $[max_allowed_loss])"
+  }"
 
-## INPUT FORMAT
-JSON object with pre-calculated metrics:
-- ticker, strike, expiration, contracts_to_sell, premium_per_contract, total_premium_income, cash_required, yield, break_even_price, stop_loss_price, max_allowed_loss
+  **risk_assessment**: "Primary risks: Assignment if stock below $[strike], unrealized losses if below $[break_even_price], capital tied up [days] days. Mitigation: Monitor price action, have assignment plan ready. (All Trades are not Financial Advice)"
+  
+  **reasoning**: Generate a pros and cons trade about the trade with the given information. Keep this but up two sentences max for pros and cons each.
+  
+  Keep responses concise and actionable with specific numbers from the input data.
+  `;
 
-## LOGIC FOR STOP LOSS
-- If "stop_loss_price" is **not** -1.23456, then use:
-  "If stock falls below $[stop_loss_price], consider closing the position to limit downside risk (max allowed loss: $[max_allowed_loss])."
-- If "stop_loss_price" **is** -1.23456, use the fallback:
-  "If stock drops significantly below $[break_even_price], consider closing to limit losses."
-
-## OUTPUT FORMAT
-Return ONLY a valid JSON object with this exact structure:
-
-{
-  "ticker": "[ticker from input]",
-  "strike": [strike from input],
-  "expiration": "[expiration from input]",
-  "contracts_to_sell": [contracts_to_sell from input],
-  "premium_per_contract": [premium_per_contract from input],
-  "total_premium_income": [total_premium_income from input],
-  "cash_required": [cash_required from input],
-  "yield": [yield from input],
-  "break_even_price": [break_even_price from input],
-  "setup_plan": "Step-by-step execution with specific numbers",
-  "exit_plan_profit_scenario": "Actions when stock closes above strike at expiration",
-  "exit_plan_assignment_scenario": "Actions when assigned shares at expiration", 
-  "exit_plan_early_exit": "Conditions for early profit-taking",
-  "exit_plan_stop_loss": "See logic above",
-  "risk_assessment": "Key risks and mitigation strategies",
-  "reasoning": "Why this represents a good opportunity"
+  return cash_secured_puts_prompt;
 }
-
-## CONTENT GUIDELINES
-
-**setup_plan**: "1. Sell [contracts_to_sell] [ticker] puts at $[strike] strike expiring [expiration] 2. Collect $[premium_per_contract] premium per contract ($[total_premium_income] total) 3. Secure with $[cash_required] cash 4. Target yield: [yield]% 5. Break-even: $[break_even_price]"
-
-**exit_plan_profit_scenario**: "Stock closes above $[strike]. Keep $[total_premium_income] premium for [yield]% return. No assignment, cash freed for next trade."
-
-**exit_plan_assignment_scenario**: "Stock closes below $[strike]. Assigned [contracts_to_sell * 100] shares at $[strike]. Effective cost basis $[break_even_price] after premium. Hold or sell covered calls."
-
-**exit_plan_early_exit**: "If premium decays to 70–80% of original value with time remaining, consider buying back puts to lock profit."
-
-**exit_plan_stop_loss**:
-- If stop_loss_price !== -1.23456: "If stock falls below $[stop_loss_price], consider closing the position to limit downside risk (max allowed loss: $[max_allowed_loss])."
-- If stop_loss_price === -1.23456: "If stock drops significantly below $[break_even_price], consider closing to limit losses."
-
-**risk_assessment**: "Primary risks: Assignment if stock below $[strike], unrealized losses if below $[break_even_price], capital tied up [days] days. Mitigation: Monitor price action, have assignment plan ready. (All Trades are not Financial Advice)"
-
-**reasoning**: "[Generate a pros and cons trade about the trade with the given information. Keep this but up two sentences max for pros and cons each.]"
-
-Keep responses concise and actionable with specific numbers from the input data.
-`;
