@@ -18,7 +18,9 @@ export default async function CratesPage({
 }: {
   searchParams: { page?: string };
 }) {
-  const currentPage = searchParams.page ? parseInt(searchParams.page) : 1;
+  const params = await searchParams;
+  const page = params.page;
+  const currentPage = page ? parseInt(page) : 1;
   const session = await auth();
   const [user] = await QUERIES.getUserByClerkId(session.userId!);
   const crates = await QUERIES.getCratesByUserIdWithPagination(
