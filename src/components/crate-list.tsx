@@ -49,7 +49,13 @@ const sampleOptionsData = {
     "SPY is in a long-term uptrend. Selling a cash-secured put below the current price provides a buffer of safety and allows us to collect premium. The chosen strike has a low delta, suggesting a high probability of expiring out-of-the-money. This strategy generates consistent income and can be a way to acquire shares at a discount.",
 };
 
-export function CrateList({ crates, page }: { crates: CardData[], page: 'dashboard' | 'crates' }) {
+export function CrateList({
+  crates,
+  page,
+}: {
+  crates: CardData[];
+  page: "dashboard" | "crates";
+}) {
   const [selectedCrate, setSelectedCrate] = useState<CardData | null>(null);
 
   return (
@@ -60,7 +66,7 @@ export function CrateList({ crates, page }: { crates: CardData[], page: 'dashboa
             <CardTitle>Crates</CardTitle>
             <CardDescription>Manage your trading crates.</CardDescription>
           </div>
-          {page === 'dashboard' ? (
+          {page === "dashboard" ? (
             <Button asChild>
               <Link href="/client/dashboard/crates">View More</Link>
             </Button>
@@ -184,6 +190,7 @@ export function CrateList({ crates, page }: { crates: CardData[], page: 'dashboa
                 selectedCrate.totalPremiumIncome
               ),
               cash_required: parseFloat(selectedCrate.cashRequired),
+              yield: Number(selectedCrate.annualizedYield),
             }}
           />
         )}
