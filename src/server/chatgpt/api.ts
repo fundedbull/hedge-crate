@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
-import { OptionsTrade } from "../polygon/api";
+import { CoveredCallTrade, OptionsTrade } from "../polygon/api";
 import { z } from "zod";
 
 const client = new OpenAI({
@@ -44,6 +44,28 @@ export default async function GenerateCSPStrategy(contract: OptionsTrade) {
     return response.output_parsed;
   } catch (err) {
     console.log("GENERATEECSPSTRAT: ", err);
+    return null;
+  }
+}
+
+export async function GenerateCCStrategy(contract: CoveredCallTrade) {
+  console.log("ATTEMPTING TO GEN CC", contract);
+  try {
+    const response = await client.responses.parse({
+      model: "gpt-4.1-mini",
+      input: [
+        { role: "system", content: covered_calls_prompt },
+        { role: "user", content: JSON.stringify(contract) },
+      ],
+      text: {
+        format: zodTextFormat(OptionsData, "cc_data"),
+      },
+      temperature: 0.1,
+    });
+    console.log("made response:", response.output_parsed);
+    return response.output_parsed;
+  } catch (err) {
+    console.log("GENERATECCSTRAT: ", err);
     return null;
   }
 }
@@ -108,3 +130,58 @@ function csp_prompt(stop_loss: number) {
 
   return cash_secured_puts_prompt;
 }
+
+const covered_calls_prompt = `
+  You are a quantitative analyst specializing in covered call strategies for income generation.
+  
+  ## TASK
+  Generate a structured analysis of the provided pre-calculated options data with specific execution and risk management guidance.
+  
+  ## INPUT FORMAT
+  JSON object with pre-calculated metrics:
+  - ticker, strike, expiration, contracts_to_sell, premium_per_contract, total_premium_income, shares_required, yield, break_even_price, assignment_price, upside_potential, max_allowed_loss
+  
+
+  
+  ## OUTPUT FORMAT
+  Return ONLY a valid JSON object with this exact structure:
+  
+  {
+    "ticker": "[ticker from input]",
+    "strike": [strike from input],
+    "expiration": "[expiration from input]",
+    "contracts_to_sell": [contracts_to_sell from input],
+    "premium_per_contract": [premium_per_contract from input],
+    "total_premium_income": [total_premium_income from input],
+    "shares_required": [shares_required from input],
+    "yield": [yield from input],
+    "break_even_price": [break_even_price from input],
+    "assignment_price": [assignment_price from input],
+    "upside_potential": [upside_potential from input],
+    "setup_plan": "Step-by-step execution with specific numbers",
+    "exit_plan_profit_scenario": "Actions when stock closes below strike at expiration",
+    "exit_plan_assignment_scenario": "Actions when stock closes above strike and shares are called away", 
+    "exit_plan_early_exit": "Conditions for early profit-taking",
+    "exit_plan_stop_loss": "Loss mitigation strategy",
+    "risk_assessment": "Key risks and mitigation strategies",
+    "reasoning": "Why this represents a good opportunity"
+  }
+  
+  ## CONTENT GUIDELINES
+  
+  **setup_plan**: "1. Sell [contracts_to_sell] [ticker] calls at $[strike] strike expiring [expiration] 2. Collect $[premium_per_contract] premium per contract ($[total_premium_income] total) 3. Hold [shares_required] shares as collateral 4. Target yield: [yield]% 5. Break-even protection: $[break_even_price]"
+  
+  **exit_plan_profit_scenario**: "Stock closes below $[strike]. Keep $[total_premium_income] premium for [yield]% return. Shares retained, can sell more covered calls."
+  
+  **exit_plan_assignment_scenario**: "Stock closes above $[strike]. Shares called away at $[assignment_price]. Total profit: $[upside_potential] (premium + capital gains). Consider re-entry or new position."
+  
+  **exit_plan_early_exit**: "If premium decays to 70–80% of original value with time remaining, consider buying back calls to lock profit and retain upside potential."
+  
+  **exit_plan_stop_loss**: "If stock drops significantly below $[break_even_price], consider closing call position to preserve capital for potential recovery (max allowed loss: $[max_allowed_loss])"
+
+  **risk_assessment**: "Primary risks: Capped upside if stock rallies above $[strike], unrealized losses if stock drops below $[break_even_price], opportunity cost if strong rally occurs. Mitigation: Monitor price action, have assignment plan ready. (All Trades are not Financial Advice)"
+  
+  **reasoning**: Generate a pros and cons analysis about the trade with the given information. Keep this to two sentences max for pros and cons each.
+  
+  Keep responses concise and actionable with specific numbers from the input data.
+  `;

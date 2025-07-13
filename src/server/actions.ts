@@ -1,10 +1,10 @@
 "use server";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { findOptions } from "./polygon/api";
+import { findCoveredCalls, findOptions } from "./polygon/api";
 
 import { QUERIES } from "./db/queries";
-import GenerateCSPStrategy from "./chatgpt/api";
+import GenerateCSPStrategy, { GenerateCCStrategy } from "./chatgpt/api";
 import { OptionsData } from "@/lib/types";
 import { db } from "./db";
 import { cardsTable, creditsTransactionTable, usersTable } from "./db/schema";
@@ -16,9 +16,13 @@ interface FormEntries {
   budget: string;
   riskAmount: string;
   rewardAmount: string;
+  sharesOwned: string;
+  costBasis: string;
 }
 
 interface ProcessedData {
+  costBasis: any;
+  sharesOwned: any;
   ticker: string;
   type: string;
   budget: number;
@@ -49,6 +53,8 @@ const processFormData = (formData: FormData): ProcessedData => {
     budget: "10000",
     riskAmount: "NaN",
     rewardAmount: "NaN", // This gives 5% target yield
+    sharesOwned: "100",
+    costBasis: "NaN",
   };
 
   // Apply defaults for empty values
@@ -58,6 +64,8 @@ const processFormData = (formData: FormData): ProcessedData => {
     budget: parseFloat(formEntries.budget || defaults.budget),
     riskAmount: parseFloat(formEntries.riskAmount || defaults.riskAmount),
     rewardAmount: parseFloat(formEntries.rewardAmount || defaults.rewardAmount),
+    sharesOwned: parseFloat(formEntries.sharesOwned || defaults.sharesOwned),
+    costBasis: parseFloat(formEntries.costBasis || defaults.costBasis),
   };
 
   // Calculate targetYieldPercent from risk/reward ratio
@@ -207,6 +215,152 @@ export async function generateCommonCrateAction(
     };
   } catch (err) {
     console.error("An error occurred during crate generation:", err);
+    return {
+      data: null,
+      error:
+        "An unexpected error occurred while generating your crate. Please try again.",
+      success: false,
+    };
+  }
+}
+
+export async function generateRareCrateAction(
+  prevState: any,
+  formData: FormData
+) {
+  console.log("Starting generateRareCrateAction");
+
+  const session = await auth();
+  if (!session.userId) {
+    console.log("User not signed in, redirecting to /sign-in");
+    return redirect("/sign-in");
+  }
+  console.log("User session found:", session.userId);
+
+  const [user] = await QUERIES.getUserByClerkId(session.userId);
+
+  if (!user || user.credits < -1) {
+    console.log("User has insufficient credits or does not exist.");
+    return {
+      data: null,
+      error: "You have insufficient credits to open a crate.",
+      success: false,
+    };
+  }
+
+  // Extract and process form data with defaults
+  const data = processFormData(formData);
+  console.log("Processed form data:", data);
+
+  const getDatePlusMonth = () =>
+    new Date(new Date().setMonth(new Date().getMonth() + 1))
+      .toISOString()
+      .split("T")[0];
+  const sharesOwned = data.sharesOwned; // New field for covered calls
+  const costBasis = data.costBasis; // New field for covered calls
+  const expiration = getDatePlusMonth();
+  const ticker = data.ticker;
+  const reward = data.rewardAmount;
+  const risk = data.riskAmount;
+
+  try {
+    const calls = await findCoveredCalls(
+      ticker,
+      expiration,
+      sharesOwned,
+      costBasis,
+      risk,
+      reward
+    );
+    if (calls.length == 0) {
+      console.log(
+        "No covered call contracts found for the given filter options."
+      );
+      return {
+        data: null,
+        error:
+          "There were no covered call contracts to find with your filter options for this instrument.",
+        success: false,
+      };
+    }
+    console.log("Found", calls.length, "covered call contracts.");
+
+    console.log(
+      "Generating covered call strategy with the first call contract:",
+      calls[0]
+    );
+    const strategy = await GenerateCCStrategy(calls[0]);
+
+    if (!strategy) {
+      return {
+        data: null,
+        error:
+          "An unexpected error occurred while generating your crate. Please try again.",
+        success: false,
+      };
+    }
+
+    await Promise.all([
+      db
+        .update(usersTable)
+        .set({ credits: user.credits - 1 })
+        .where(eq(usersTable.clerkId, session.userId)),
+      db.insert(creditsTransactionTable).values({
+        userId: user.id,
+        amount: 1,
+        type: "crate_open",
+      }),
+      db.insert(cardsTable).values({
+        userId: user.id,
+        ticker: strategy["ticker"],
+        strike: strategy["strike"].toString(),
+        expiration: strategy["expiration"],
+        contract: "",
+        contractsToSell: strategy["contracts_to_sell"],
+        premiumPerContract: strategy["premium_per_contract"].toString(),
+        totalPremiumIncome: strategy["total_premium_income"].toString(),
+        cashRequired: strategy.cash_required.toString(), // Using existing field for shares count
+        annualizedYield: strategy.yield.toString(),
+        breakEvenPrice: strategy["break_even_price"].toString(),
+        setupPlan: strategy["setup_plan"],
+        exitPlan: {
+          "PROFIT SCENARIO": strategy.exit_plan_profit_scenario,
+          "ASSIGNMENT SCENARIO": strategy.exit_plan_assignment_scenario,
+          "EARLY EXIT": strategy.exit_plan_early_exit,
+          "STOP LOSS": strategy.exit_plan_stop_loss,
+        },
+        riskAssessment: strategy["risk_assessment"],
+        reasoning: strategy["reasoning"],
+        rarity: "rare", // Changed from "common"
+      }),
+    ]);
+
+    return {
+      data: {
+        ticker: strategy.ticker,
+        strike: strategy.strike,
+        expiration: strategy.expiration,
+        contracts_to_sell: strategy.contracts_to_sell,
+        premium_per_contract: strategy.premium_per_contract,
+        total_premium_income: strategy.total_premium_income,
+        cash_required: strategy.cash_required, // Using existing field name for shares count
+        yield: strategy.yield,
+        break_even_price: strategy.break_even_price,
+        setup_plan: strategy.setup_plan,
+        exit_plan: {
+          "PROFIT SCENARIO": strategy.exit_plan_profit_scenario,
+          "ASSIGNMENT SCENARIO": strategy.exit_plan_assignment_scenario,
+          "EARLY EXIT": strategy.exit_plan_early_exit,
+          "STOP LOSS": strategy.exit_plan_stop_loss,
+        },
+        risk_assessment: strategy.risk_assessment,
+        reasoning: strategy.reasoning,
+      },
+      error: "",
+      success: true,
+    };
+  } catch (err) {
+    console.error("An error occurred during rare crate generation:", err);
     return {
       data: null,
       error:
