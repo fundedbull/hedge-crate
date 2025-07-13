@@ -53,7 +53,7 @@ const initialState = {
   success: false,
 };
 
-export default function Page() {
+export default function CrateGenerator() {
   const [state, formAction, pending] = useActionState(
     generateCommonCrateAction,
     initialState
